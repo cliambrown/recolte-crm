@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PersonController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['auth'])->group(function () {
+   
+    Route::get('/', [PersonController::class, 'index'])->name('home');
+    Route::resource('links', PersonController::class)->except(['index']);
+    
 });
+
+require __DIR__.'/auth.php';
