@@ -17,6 +17,9 @@ class CreatePeopleTable extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('created_by_user_id');
+            $table->string('given_name')->nullable();
+            $table->string('family_name')->nullable();
+            $table->string('notes', 1000)->nullable();
         });
     }
 
