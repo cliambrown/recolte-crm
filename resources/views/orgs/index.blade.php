@@ -34,6 +34,13 @@
                             </td>
                             <td class="align-text-top p-1">
                                 {{ $org->name }}
+                                @if ($org->website)
+                                    <div>
+                                        <x-link :href="$org->website">
+                                            {{ get_domain($org->website) }}
+                                        </x-link>
+                                    </div>
+                                @endif
                             </td>
                             <td class="align-text-top p-1">
                                 @if ($org->street_address)
@@ -51,18 +58,16 @@
                                 @endif
                             </td>
                             <td class="align-text-top p-1">
-                                @if ($org->website)
-                                    <div>
-                                        <x-link :href="$org->website">
-                                            {{ get_domain($org->website) }}
-                                        </x-link>
-                                    </div>
-                                @endif
                                 @if ($org->email)
                                     <div>
                                         <x-link href="mailto:{{ $org->email }}">
                                             {{ $org->email }}
                                         </x-link>
+                                    </div>
+                                @endif
+                                @if ($org->phone)
+                                    <div>
+                                        {{ $org->readable_phone }}
                                     </div>
                                 @endif
                             </td>

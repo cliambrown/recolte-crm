@@ -46,21 +46,51 @@
                     
                 </div>
                 
-                <div class="md:grid md:gap-8 md:grid-cols-3 mt-4">
+                <div class="md:grid md:gap-4 md:grid-cols-4 mt-4">
                 
-                    <div class="mb-8">
+                    <div class="mb-8 max-w-xs">
                         <x-label for="city" :value="__('City')" />
                         <x-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city', $org->city)" />
                     </div>
                     
-                    <div class="mb-8">
+                    <div class="mb-8 max-w-xs">
                         <x-label for="province" :value="__('Province')" />
                         <x-input id="province" class="block mt-1 w-full" type="text" name="province" :value="old('province', $org->province)" />
                     </div>
                     
-                    <div class="mb-8">
+                    <div class="mb-8 max-w-xs">
+                        <x-label for="country" :value="__('Country')" />
+                        {{-- <x-input id="country" class="block mt-1 w-full" type="text" name="country" :value="old('country', $org->country)" /> --}}
+                        <x-select id="country" class="block mt-1 w-full" name="country">
+                            <option value="" {{ old('country', $org->country) === null ? 'selected' : '' }}></option>
+                            @foreach (get_all_countries() as $country)
+                                <option value="{{ $country }}" {{ old('country', $org->country) === $country ? 'selected' : '' }}>{{ $country }}</option>
+                            @endforeach
+                        </x-select>
+                    </div>
+                    
+                    <div class="mb-8 max-w-xs">
                         <x-label for="postal_code" :value="__('Postal Code')" />
                         <x-input id="postal_code" class="block mt-1 w-full" type="text" name="postal_code" :value="old('postal_code', $org->postal_code)" />
+                    </div>
+                    
+                </div>
+                
+                <div class="mb-8">
+                    <x-label for="website" :value="__('Website')" />
+                    <x-input id="website" class="block mt-1 w-full" type="text" name="website" :value="old('website', $org->website)" />
+                </div>
+                
+                <div class="md:grid md:gap-4 md:grid-cols-2 mt-4">
+                
+                    <div class="mb-8">
+                        <x-label for="phone" :value="__('Phone')" />
+                        <x-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone', $org->phone)" />
+                    </div>
+                    
+                    <div class="mb-8">
+                        <x-label for="email" :value="__('Main Email')" />
+                        <x-input id="email" class="block mt-1 w-full" type="text" name="email" :value="old('email', $org->email)" />
                     </div>
                     
                 </div>

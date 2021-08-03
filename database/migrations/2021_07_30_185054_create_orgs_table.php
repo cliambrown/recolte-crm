@@ -22,8 +22,8 @@ class CreateOrgsTable extends Migration
             $table->string('street_address_2')->nullable();
             $table->string('city')->nullable();
             $table->string('province')->nullable();
+            $table->string('country')->nullable();
             $table->string('postal_code')->nullable();
-            $table->string('po_box')->nullable();
             $table->string('website')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();

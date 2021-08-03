@@ -21,6 +21,10 @@ class OrgFactory extends Factory
      */
     public function definition()
     {
+        
+        $phoneObj = get_valid_phone_obj($this->faker->e164PhoneNumber());
+        $phone = get_readable_phone($phoneObj);
+        
         return [
             'created_by_user_id' => 1,
             'name' => $this->faker->company(),
@@ -28,10 +32,10 @@ class OrgFactory extends Factory
             'street_address_2' => (mt_rand(0, 10) > 8 ? $this->faker->secondaryAddress() : null),
             'city' => $this->faker->city(),
             'province' => $this->faker->state(),
+            'country' => $this->faker->country(),
             'postal_code' => $this->faker->postcode(),
-            'po_box' => (mt_rand(0, 10) > 8 ? 'PO Box '.mt_rand(11111, 99999) : null),
             'website' => $this->faker->url(),
-            'phone' => $this->faker->e164PhoneNumber(),
+            'phone' => $phone,
             'email' => $this->faker->safeEmail(),
         ];
     }
