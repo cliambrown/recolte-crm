@@ -106,7 +106,15 @@ class OrgController extends Controller
      */
     public function edit(Org $org)
     {
-        return view('orgs.create-edit')->with(['isEdit' => true, 'org' => $org]);
+        
+        $cityOptions = ['Audratown','Charlotte','Charlottetown','Chicago','Montréal','Medicine Hat','Winnipeg'];
+        $data = [
+            'isEdit' => true,
+            'org' => $org,
+            'cityOptions' => $cityOptions,
+        ];
+        
+        return view('orgs.create-edit')->with($data);
     }
 
     /**
