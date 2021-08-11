@@ -1,5 +1,6 @@
 window.suggestInput = function (data) {
     return {
+        id: data.id,
         current_input: data.current_input,
         show_options: false,
         options: [],
@@ -26,9 +27,9 @@ window.suggestInput = function (data) {
             };
             const myIndex = Fuse.createIndex(fuseOptions.keys, this.getOptions());
             this.fuse = new Fuse(this.getOptions(), fuseOptions, myIndex);
-            this.filterOptions(this.current_input);
+            this.filterOptions(this.current_input, false);
         },
-        filterOptions(input) {
+        filterOptions(input, doShowOptions) {
             input = simpleSearchStr(input);
             if (!input) {
                 this.options_filtered = _.map(this.getOptions(), 'name');
@@ -36,15 +37,24 @@ window.suggestInput = function (data) {
                 let results = this.fuse.search(input);
                 this.options_filtered = _.map(results, 'item.name');
             }
+            if (this.options_filtered.length) {
+                this.focused_option_index = 0;
+            } else {
+                this.focused_option_index = null;
+            }
+            if (doShowOptions) {
+                this.show_options = true;
+                this.$nextTick(() => { this.scrollToFocus() });
+            }
         },
         selectOption(index = null) {
             if (index !== null) {
                 this.focused_option_index = index;
             }
-            if (this.focused_option_index < 0 || this.focused_option_index >= this.options.length) {
+            if (this.focused_option_index < 0 || this.focused_option_index >= this.options_filtered.length) {
                 this.focused_option_index = null;
             } else {
-                this.current_input = this.options[this.focused_option_index].name;
+                this.current_input = this.options_filtered[this.focused_option_index];
             }
             this.show_options = false;
         },
@@ -52,8 +62,8 @@ window.suggestInput = function (data) {
             this.show_options = true;
             if (this.focused_option_index === null) {
                 this.focused_option_index = 0;
-            } else if (this.focused_option_index + 1 >= this.options.length) {
-                this.focused_option_index = this.options.length - 1;
+            } else if (this.focused_option_index + 1 >= this.options_filtered.length) {
+                this.focused_option_index = this.options_filtered.length - 1;
             } else {
                 ++this.focused_option_index;
             }
@@ -62,7 +72,7 @@ window.suggestInput = function (data) {
         optionUp() {
             this.show_options = true;
             if (this.focused_option_index === null) {
-                this.focused_option_index = this.options.length - 1;
+                this.focused_option_index = this.options_filtered.length - 1;
             } else if (this.focused_option_index <= 0) {
                 this.focused_option_index = 0;
             } else {
@@ -72,7 +82,9 @@ window.suggestInput = function (data) {
         },
         scrollToFocus() {
             if (this.focused_option_index === null) return false;
-            this.$refs.listbox.children[this.focused_option_index].scrollIntoView({
+            let el = document.getElementById(this.id + '-option-' + this.focused_option_index);
+            if (!el) return false;
+            el.scrollIntoView({
                 behavior: "smooth",
                 block: "center"
             });

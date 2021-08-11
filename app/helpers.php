@@ -25,6 +25,27 @@ function get_all_countries() {
 }
 
 /**
+ * Get an array of Canadian cities.
+ *
+ * @return Array
+ */
+function get_all_cities() {
+    return ["Montréal","Québec","Toronto","Ottawa","Calgary","Edmonton","Mississauga","Winnipeg","Vancouver","Brampton","Hamilton","Surrey","Laval","Halifax","London","Markham","Vaughan","Gatineau","Saskatoon","Longueuil","Kitchener","Burnaby","Windsor","Regina","Richmond","Richmond Hill","Oakville","Burlington","Sudbury","Sherbrooke","Oshawa","Saguenay","Lévis","Barrie","Abbotsford","Coquitlam","Trois-Rivières","St. Catharines","Guelph","Cambridge","Whitby","Kelowna","Kingston","Ajax","Langley","Saanich","Terrebonne","Milton","St. John's","Thunder Bay","Waterloo","Delta","Chatham-Kent","Red Deer","Strathcona County","Brantford","Saint-Jean-sur-Richelieu","Cape Breton","Lethbridge","Clarington","Pickering","Nanaimo","Kamloops","Niagara Falls","North Vancouver","Victoria","Brossard","Repentigny","Newmarket","Chilliwack","Maple Ridge","Peterborough","Kawartha Lakes","Drummondville","Saint-Jérôme","Prince George","Sault Ste. Marie","Moncton","Sarnia","Wood Buffalo","New Westminster","Saint John","Caledon","Granby","St. Albert","Norfolk County","Medicine Hat","Grande Prairie","Airdrie","Halton Hills","Port Coquitlam","Fredericton","Blainville","Saint-Hyacinthe","Aurora","North Vancouver","Welland","North Bay","Belleville","Mirabel"];
+}
+
+/**
+ * Get an array of Canadian provinces & territories and American states.
+ *
+ * @return Array
+ */
+function get_all_provinces() {
+    return [
+        "Québec","Alberta","Colombie-Britannique","Île-du-Prince-Édouard","Manitoba","Nouveau-Brunswick","Nouvelle-Écosse","Ontario","Saskatchewan","Terre-Neuve-et-Labrador","Nunavut","Territoires du Nord-Ouest","Yukon",
+        "Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming",
+    ];
+}
+
+/**
  * libphonenumber's parse(), but returns null instead of throwing error
  *
  * @param  String  $value

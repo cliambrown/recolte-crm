@@ -30,7 +30,13 @@ class OrgController extends Controller
         $org->city = 'Montréal';
         $org->province = 'Québec';
         $org->country = 'Canada';
-        return view('orgs.create-edit')->with(['isEdit' => false, 'org' => $org]);
+        $data = [
+            'isEdit' => false,
+            'org' => $org,
+            'cityOptions' => get_all_cities(),
+            'provinceOptions' => get_all_provinces(),
+        ];
+        return view('orgs.create-edit')->with($data);
     }
 
     /**
@@ -106,14 +112,12 @@ class OrgController extends Controller
      */
     public function edit(Org $org)
     {
-        
-        $cityOptions = ['Audratown','Charlotte','Charlottetown','Chicago','Montréal','Medicine Hat','Winnipeg'];
         $data = [
             'isEdit' => true,
             'org' => $org,
-            'cityOptions' => $cityOptions,
+            'cityOptions' => get_all_cities(),
+            'provinceOptions' => get_all_provinces(),
         ];
-        
         return view('orgs.create-edit')->with($data);
     }
 

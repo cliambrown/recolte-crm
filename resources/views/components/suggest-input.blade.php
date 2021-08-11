@@ -1,14 +1,16 @@
 @props([
     'currentInput',
     'options',
+    'id',
 ])
 
-<div class="relative" x-data="suggestInput({ current_input: {{ $currentInput ? "'".$currentInput."'" : 'null' }}, options: {{ json_encode($options) }} })" x-init="init()">
+<div class="relative" x-data="suggestInput({ id: '{{ $id }}', current_input: {{ $currentInput ? "'".$currentInput."'" : 'null' }}, options: {{ json_encode($options) }} })" x-init="init()">
     <x-input {{ $attributes }}
+        :id="$id"
         type="text"
         x-model="current_input"
         x-ref="input_el"
-        x-on:input.debounce="filterOptions($event.target.value)"
+        x-on:input.debounce="filterOptions($event.target.value, true)"
         x-on:keydown.enter.stop.prevent="selectOption()"
         x-on:keydown.arrow-up.prevent="optionUp"
         x-on:keydown.arrow-down.prevent="optionDown"
@@ -18,19 +20,22 @@
         x-on:focus="show_options = true"
         x-on:blur="show_options = false"
         />
-    <div x-show="show_options" class="absolute z-10 w-full bg-white rounded-sm shadow-lg border">
-        <ul x-ref="listbox" class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:outline-none sm:text-sm sm:leading-5">
+    <div x-show="show_options" x-cloak class="absolute z-10 w-full bg-white rounded-sm shadow-lg border">
+        <ul x-show="!!options_filtered.length" x-ref="listbox" class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:outline-none sm:text-sm sm:leading-5">
             <template x-for="(option, index) in options_filtered">
-                <li>
+                <li x-bind:id="'{{ $id }}-option-'+index">
                     <button type="button"
                         x-text="option"
                         :class="{ 'text-white bg-indigo-600': index === focused_option_index }"
-                        class="block w-full text-left py-1 px-3"
+                        class="block w-full text-left py-1 px-3 text-base"
                         x-on:mousedown.prevent="selectOption(index)"
                         tabindex="-1"
                         ></button>
                 </li>
             </template>
         </ul>
+        <div x-show="!options_filtered.length" class="py-2 px-3 text-gray-500">
+            {{ __('Nothing to show') }}
+        </div>
     </div>
 </div>

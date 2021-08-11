@@ -50,14 +50,12 @@
                 
                     <div class="mb-8 max-w-xs">
                         <x-label for="city" :value="__('City')" />
-                        {{-- <x-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city', $org->city)" /> --}}
-                        {{-- <x-suggest-input id="city" class="block mt-1 w-full" name="city" :selectedOption="old('city', $org->city)" :options="$cityOptions" /> --}}
                         <x-suggest-input id="city" class="block mt-1 w-full" name="city" :currentInput="old('city', $org->city)" :options="$cityOptions" />
                     </div>
                     
                     <div class="mb-8 max-w-xs">
                         <x-label for="province" :value="__('Province')" />
-                        <x-input id="province" class="block mt-1 w-full" type="text" name="province" :value="old('province', $org->province)" />
+                        <x-suggest-input id="province" class="block mt-1 w-full" name="province" :currentInput="old('province', $org->province)" :options="$provinceOptions" />
                     </div>
                     
                     <div class="mb-8 max-w-xs">
