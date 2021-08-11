@@ -1,22 +1,13 @@
 @props([
-    'currentInput' => null,
-    'currentValue' => null,
+    'currentValue',
+    'currentInput' => '',
     'options',
     'id',
-    'asSelect' => false,
 ])
 
-<div class="relative" x-data="suggestInput({ as_select: {{ $asSelect ? 'true' : 'false' }}, id: '{{ $id }}', current_value: {{ $currentValue ? "'".$currentValue."'" : 'null' }}, current_input: {{ $currentInput ? "'".$currentInput."'" : 'null' }}, options: {{ json_encode($options) }} })" x-init="init()">
-    <div class="relative">
-        @if ($asSelect)
-            <button type="button"
-                x-ref="select_button"
-                x-show="!show_options"
-                class="rounded-md bg-purple-500 bg-opacity-20 absolute block w-full inset-0 text-left pt-2 pb-2 px-3 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                x-on:click="$refs.input_el.focus()"
-                x-on:keydown.arrow-down.prevent="$refs.input_el.focus()"
-                x-text="current_value"></button>
-        @endif
+<div class="relative" x-data="suggestInput({ id: '{{ $id }}', current_value: {{ $currentValue }}, current_input: {{ $currentInput ? "'".$currentInput."'" : 'null' }}, options: {{ json_encode($options) }} })" x-init="init()">
+    <div class="relative w-full">
+        <button type="button" x-show="!show_options" class="rounded-md bg-purple-200 bg-opacity-20 absolute block w-full inset-0" ></button>
         <x-input {{ $attributes->merge(['class' => 'block w-full']) }}
             :id="$id"
             type="text"
@@ -38,8 +29,8 @@
             <template x-for="(option, index) in options_filtered">
                 <li x-bind:id="'{{ $id }}-option-'+index">
                     <button type="button"
-                        x-text="option.item.name"
-                        :class="{ 'text-white bg-indigo-600': index === focused_option_index, 'hover:bg-indigo-50': index !== focused_option_index }"
+                        x-text="option"
+                        :class="{ 'text-white bg-indigo-600': index === focused_option_index }"
                         class="block w-full text-left py-1 px-3 text-base"
                         x-on:mousedown.prevent="selectOption(index)"
                         tabindex="-1"

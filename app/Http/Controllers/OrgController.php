@@ -35,6 +35,7 @@ class OrgController extends Controller
             'org' => $org,
             'cityOptions' => get_all_cities(),
             'provinceOptions' => get_all_provinces(),
+            'countryOptions' => get_all_countries(),
         ];
         return view('orgs.create-edit')->with($data);
     }
@@ -117,6 +118,7 @@ class OrgController extends Controller
             'org' => $org,
             'cityOptions' => get_all_cities(),
             'provinceOptions' => get_all_provinces(),
+            'countryOptions' => get_all_countries(),
         ];
         return view('orgs.create-edit')->with($data);
     }

@@ -3853,10 +3853,13 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 window.suggestInput = function (data) {
   return {
+    as_select: _.get(data, 'as_select', false),
     id: data.id,
+    current_value: _.get(data, 'current_value'),
     current_input: data.current_input,
     show_options: false,
     options: [],
+    options_unfiltered: [],
     options_filtered: [],
     focused_option_index: null,
     open: false,
@@ -3866,10 +3869,17 @@ window.suggestInput = function (data) {
     },
     init: function init() {
       for (var i = 0, len = data.options.length; i < len; ++i) {
-        var option = data.options[i];
-        this.options.push({
-          name: option,
-          simple_name: simpleSearchStr(option)
+        var optionName = data.options[i];
+        var option = {
+          name: optionName,
+          simple_name: simpleSearchStr(optionName)
+        };
+        this.options.push(option); // Get them into Fuse.js format
+
+        this.options_unfiltered.push({
+          item: option,
+          refIndex: i,
+          score: 1
         });
       }
 
@@ -3889,10 +3899,9 @@ window.suggestInput = function (data) {
       input = simpleSearchStr(input);
 
       if (!input) {
-        this.options_filtered = _.map(this.getOptions(), 'name');
+        this.options_filtered = JSON.parse(JSON.stringify(this.options_unfiltered));
       } else {
-        var results = this.fuse.search(input);
-        this.options_filtered = _.map(results, 'item.name');
+        this.options_filtered = this.fuse.search(input);
       }
 
       if (this.options_filtered.length) {
@@ -3909,6 +3918,8 @@ window.suggestInput = function (data) {
       }
     },
     selectOption: function selectOption() {
+      var _this2 = this;
+
       var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
       if (index !== null) {
@@ -3918,7 +3929,18 @@ window.suggestInput = function (data) {
       if (this.focused_option_index < 0 || this.focused_option_index >= this.options_filtered.length) {
         this.focused_option_index = null;
       } else {
-        this.current_input = this.options_filtered[this.focused_option_index];
+        var selectedFilteredOption = this.options_filtered[this.focused_option_index];
+
+        if (this.as_select) {
+          this.current_value = selectedFilteredOption.item.name;
+          this.current_input = null;
+          this.filterOptions('', false);
+          this.$nextTick(function () {
+            _this2.$refs.select_button.focus();
+          });
+        } else {
+          this.current_input = selectedFilteredOption.item.name;
+        }
       }
 
       this.show_options = false;
