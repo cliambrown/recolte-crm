@@ -14,7 +14,7 @@
                 x-show="!show_options"
                 class="rounded-md bg-purple-500 bg-opacity-20 absolute block w-full inset-0 text-left pt-2 pb-2 px-3 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 x-on:click="$refs.input_el.focus()"
-                x-on:keydown.arrow-down.prevent="$refs.input_el.focus()"
+                x-on:keydown.arrow-down.prevent="$refs.input_el.focus();"
                 x-text="current_value"></button>
         @endif
         <x-input {{ $attributes->merge(['class' => 'block w-full']) }}
