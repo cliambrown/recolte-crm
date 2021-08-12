@@ -32,7 +32,7 @@
                     <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $org->name)" required autofocus />
                 </div>
                 
-                <div class="md:grid md:gap-8 md:grid-cols-2 mt-4">
+                <div class="md:grid md:gap-8 md:grid-cols-2">
                 
                     <div class="mb-8">
                         <x-label for="street_address" :value="__('Street Address')" />
@@ -46,7 +46,7 @@
                     
                 </div>
                 
-                <div class="md:grid md:gap-4 md:grid-cols-4 mt-4">
+                <div class="md:grid md:gap-4 md:grid-cols-4">
                 
                     <div class="mb-8 max-w-xs">
                         <x-label for="city" :value="__('City')" />
@@ -72,7 +72,7 @@
                             @endforeach
                         </x-select> --}}
                         <div class="mt-1">
-                            <x-suggest-input id="country" name="country" :currentValue="old('country', $org->country)" :options="$countryOptions" :asSelect="true" />
+                            <x-suggest-input id="country" name="country" :currentValue="old('country', $org->country)" :currentInput="old('country', $org->country)" :options="$countryOptions" :asSelect="true" />
                         </div>
                     </div>
                     
@@ -88,7 +88,7 @@
                     <x-input id="website" class="block mt-1 w-full" type="text" name="website" :value="old('website', $org->website)" />
                 </div>
                 
-                <div class="md:grid md:gap-4 md:grid-cols-2 mt-4">
+                <div class="md:grid md:gap-4 md:grid-cols-2">
                 
                     <div class="mb-8">
                         <x-label for="phone" :value="__('Phone')" />
@@ -111,6 +111,11 @@
                         x-init="resizeTextarea($el)"
                         x-on:input="resizeTextarea($event.target)"
                         >{{ old('notes', $org->notes) }}</textarea>
+                </div>
+                
+                <div class="mb-8">
+                    <x-label for="types" :value="__('Type')" />
+                    
                 </div>
                 
                 <div class="mb-8">

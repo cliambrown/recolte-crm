@@ -4,6 +4,7 @@ window.suggestInput = function (data) {
         id: data.id,
         current_value: _.get(data, 'current_value'),
         current_input: data.current_input,
+        show_input: !data.as_select,
         show_options: false,
         options: [],
         options_unfiltered: [],
@@ -64,13 +65,13 @@ window.suggestInput = function (data) {
                 this.focused_option_index = null;
             } else {
                 let selectedFilteredOption = this.options_filtered[this.focused_option_index];
+                let val = selectedFilteredOption.item.name;
+                this.current_input = val;
                 if (this.as_select) {
-                    this.current_value = selectedFilteredOption.item.name;
-                    this.current_input = null;
-                    this.filterOptions('', false);
+                    this.current_value = val;
+                    this.filterOptions(val, false);
+                    this.show_input = false;
                     this.$nextTick(() => { this.$refs.select_button.focus() });
-                } else {
-                    this.current_input = selectedFilteredOption.item.name;
                 }
             }
             this.show_options = false;
@@ -98,13 +99,27 @@ window.suggestInput = function (data) {
             this.scrollToFocus();
         },
         scrollToFocus() {
-            if (this.focused_option_index === null) return false;
+            if (this.focused_option_index === null) return;
             let el = document.getElementById(this.id + '-option-' + this.focused_option_index);
-            if (!el) return false;
+            if (!el) return;
             el.scrollIntoView({
                 behavior: "smooth",
                 block: "center"
             });
+        },
+        onSelectButtonClick() {
+            this.show_input = true;
+            this.$nextTick(() => { this.$refs.input_el.focus() });
+        },
+        onLeaveInput(e) {
+            if (this.$refs.input_group.contains(e.relatedTarget)) return;
+            this.show_options = false;
+            if (this.as_select) this.show_input = false;
+        },
+        onClear() {
+            this.current_input = '';
+            this.filterOptions('', false);
+            this.$refs.input_el.focus();
         },
     }
 }

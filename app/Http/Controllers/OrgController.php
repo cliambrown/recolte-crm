@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Org;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class OrgController extends Controller
 {
@@ -55,7 +56,11 @@ class OrgController extends Controller
             'city' => 'nullable|string',
             'province' => 'nullable|string',
             'postal_code' => 'nullable|string',
-            'country' => 'nullable|string',
+            'country' => [
+                'nullable',
+                'string',
+                Rule::in(get_all_countries()),
+            ],
             'website' => 'nullable|string|url',
             'phone' => [
                 'nullable',
@@ -139,7 +144,11 @@ class OrgController extends Controller
             'city' => 'nullable|string',
             'province' => 'nullable|string',
             'postal_code' => 'nullable|string',
-            'country' => 'nullable|string',
+            'country' => [
+                'nullable',
+                'string',
+                Rule::in(get_all_countries()),
+            ],
             'website' => 'nullable|string|url',
             'phone' => [
                 'nullable',

@@ -35,4 +35,15 @@ class Org extends Model
         }
         $this->attributes['postal_code'] = $value;
     }
+    
+    public function getOneLineAddressAttribute() {
+        $parts = [];
+        if ($this->street_address) $parts[] = $this->street_address;
+        if ($this->street_address_2) $parts[] = $this->street_address_2;
+        if ($this->city) $parts[] = $this->city;
+        if ($this->province) $parts[] = $this->province;
+        if ($this->country) $parts[] = $this->country;
+        if ($this->postal_code) $parts[] = $this->postal_code;
+        return implode(', ', $parts);
+    }
 }

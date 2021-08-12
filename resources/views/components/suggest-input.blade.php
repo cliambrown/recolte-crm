@@ -8,30 +8,38 @@
 
 <div class="relative" x-data="suggestInput({ as_select: {{ $asSelect ? 'true' : 'false' }}, id: '{{ $id }}', current_value: {{ $currentValue ? "'".$currentValue."'" : 'null' }}, current_input: {{ $currentInput ? "'".$currentInput."'" : 'null' }}, options: {{ json_encode($options) }} })" x-init="init()">
     <div class="relative">
+        <div class="relative group" x-show="show_input" x-ref="input_group" {{ $asSelect ? 'x-cloak' : '' }} x-on:focusout="onLeaveInput">
+            <x-input {{ $attributes->merge(['class' => 'block w-full']) }}
+                :id="$id"
+                type="text"
+                x-model="current_input"
+                x-ref="input_el"
+                x-on:input.debounce="filterOptions($event.target.value, true)"
+                x-on:keydown.enter.stop.prevent="selectOption()"
+                x-on:keydown.arrow-up.prevent="optionUp"
+                x-on:keydown.arrow-down.prevent="optionDown"
+                x-on:keydown.arrow-down.prevent="optionDown"
+                x-on:keydown.escape.prevent="show_options = false"
+                x-on:click="show_options = true"
+                x-on:focus="show_options = true"
+                />
+            <button type="button"
+                class="absolute h-full w-10 p-2 inset-y-0 right-0 my-auto text-gray-500 hidden rounded-md group-focus-within:block focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                x-on:click="onClear">
+                    <x-icons.x></x-icons.x>
+            </button>
+        </div>
         @if ($asSelect)
             <button type="button"
                 x-ref="select_button"
-                x-show="!show_options"
-                class="rounded-md bg-purple-500 bg-opacity-20 absolute block w-full inset-0 text-left pt-2 pb-2 px-3 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                x-on:click="$refs.input_el.focus()"
-                x-on:keydown.arrow-down.prevent="$refs.input_el.focus();"
-                x-text="current_value"></button>
+                x-show="!show_input"
+                class="bg-white block w-full text-left py-2 pl-3 pr-8 outline-none rounded-md shadow-sm border border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                x-on:click="onSelectButtonClick"
+                x-on:keydown.arrow-down.prevent="onSelectButtonClick">
+                    <span x-text="current_value"></span>
+                    <x-icons.down class="text-gray-500 absolute inset-y-0 right-1 my-auto z-10"></x-icons.down>
+            </button>
         @endif
-        <x-input {{ $attributes->merge(['class' => 'block w-full']) }}
-            :id="$id"
-            type="text"
-            x-model="current_input"
-            x-ref="input_el"
-            x-on:input.debounce="filterOptions($event.target.value, true)"
-            x-on:keydown.enter.stop.prevent="selectOption()"
-            x-on:keydown.arrow-up.prevent="optionUp"
-            x-on:keydown.arrow-down.prevent="optionDown"
-            x-on:keydown.arrow-down.prevent="optionDown"
-            x-on:keydown.escape.prevent="show_options = false"
-            x-on:click="show_options = true"
-            x-on:focus="show_options = true"
-            x-on:blur="show_options = false"
-            />
     </div>
     <div x-show="show_options" x-cloak class="absolute z-10 w-full bg-white rounded-sm shadow-lg border">
         <ul x-show="!!options_filtered.length" x-ref="listbox" class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:outline-none sm:text-sm sm:leading-5">
