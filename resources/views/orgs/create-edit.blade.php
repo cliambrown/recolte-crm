@@ -27,9 +27,18 @@
                     @method('PUT')
                 @endif
                 
-                <div class="mb-8">
-                    <x-label for="name" :value="__('Name')" />
-                    <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $org->name)" required autofocus />
+                <div class="md:grid md:gap-8 md:grid-cols-4">
+                    
+                    <div class="mb-8 col-span-3">
+                        <x-label for="name" :value="__('Name')" />
+                        <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $org->name)" required autofocus />
+                    </div>
+                    
+                    <div class="mb-8 max-w-xs">
+                        <x-label for="short_name" :value="__('Short Name')" />
+                        <x-input id="short_name" class="block mt-1 w-full" type="text" name="short_name" :value="old('short_name', $org->short_name)" />
+                    </div>
+                    
                 </div>
                 
                 <div class="md:grid md:gap-8 md:grid-cols-2">
@@ -114,8 +123,15 @@
                 </div>
                 
                 <div class="mb-8">
-                    <x-label for="types" :value="__('Type')" />
-                    
+                    <x-label for="types" :value="__('Categories')" />
+                    @foreach ($orgTypes as $orgType)
+                        <div class="">
+                            <label for="types-{{ $orgType->id }}" class="inline-block cursor-pointer my-1">
+                                <input id="types-{{ $orgType->id }}" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="type_ids[]" value="{{ $orgType->id }}" {{ in_array($orgType->id, old('type_ids', $org->type_ids)) ? 'checked' : '' }}>
+                                <span class="ml-2 text-sm text-gray-600">{{ $orgType->name }}</span>
+                            </label>
+                        </div>
+                    @endforeach
                 </div>
                 
                 <div class="mb-8">

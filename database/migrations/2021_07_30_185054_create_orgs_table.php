@@ -18,6 +18,7 @@ class CreateOrgsTable extends Migration
             $table->timestamps();
             $table->foreignId('created_by_user_id');
             $table->string('name');
+            $table->string('short_name')->nullable();
             $table->string('street_address')->nullable();
             $table->string('street_address_2')->nullable();
             $table->string('city')->nullable();

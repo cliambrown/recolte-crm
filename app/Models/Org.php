@@ -46,4 +46,15 @@ class Org extends Model
         if ($this->postal_code) $parts[] = $this->postal_code;
         return implode(', ', $parts);
     }
+    
+    public function types() {
+        return $this->belongsToMany(OrgType::class, 'org_org_types');
+    }
+    
+    public function getTypeIdsAttribute() {
+        return $this->types->pluck('id')->toArray();
+    }
+    public function getTypeNamesAttribute() {
+        return $this->types->pluck('name')->toArray();
+    }
 }

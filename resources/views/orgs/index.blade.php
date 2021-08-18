@@ -26,8 +26,14 @@
                             {{ __('Edit Info') }}
                         </x-button>
                     </div>
-                    <div class="font-bold text-gray-700">{{ $org->name }}</div>
-                    <div class="text-sm text-gray-700 overflow-hidden">
+                    <div class="font-bold text-gray-700">
+                        {{ $org->name }}
+                        @if ($org->short_name)
+                            <span class="text-sm text-gray-500 font-normal mx-1">/</span>
+                            {{ $org->short_name }}
+                        @endif
+                    </div>
+                    <div class="text-sm text-gray-700 overflow-hidden mt-1">
                         <div class="-mx-1">
                             @if ($org->website)
                                 <a href="{{ $org->website }}" target="_blank" class="cursor-pointer mx-1">
@@ -49,6 +55,16 @@
                             @endif
                         </div>
                     </div>
+                    @if ($org->types->count())
+                        <div class="text-sm text-gray-600 mt-1">
+                            @foreach ($org->types as $orgType)
+                                {{ $orgType->name }}
+                                @if (!$loop->last)
+                                    <span class="text-sm text-gray-500 font-normal mx-1"> | </span>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             
             @endforeach

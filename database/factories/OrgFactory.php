@@ -25,9 +25,14 @@ class OrgFactory extends Factory
         $phoneObj = get_valid_phone_obj($this->faker->e164PhoneNumber());
         $phone = get_readable_phone($phoneObj);
         
+        $name = $this->faker->company();
+        preg_match_all('/\b(\w)/', $name, $matches);
+        $acronym = implode('', $matches[1]);
+        
         return [
             'created_by_user_id' => 1,
-            'name' => $this->faker->company(),
+            'name' => $name,
+            'short_name' => $acronym,
             'street_address' => $this->faker->streetAddress(),
             'street_address_2' => (mt_rand(0, 10) > 8 ? $this->faker->secondaryAddress() : null),
             'city' => $this->faker->city(),

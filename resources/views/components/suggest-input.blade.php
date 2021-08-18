@@ -4,7 +4,12 @@
     'options',
     'id',
     'asSelect' => false,
+    'placeholderText' => __('Select...'),
 ])
+
+@php
+    if (!$asSelect) $allowMultiple = false;
+@endphp
 
 <div class="relative" x-data="suggestInput({ as_select: {{ $asSelect ? 'true' : 'false' }}, id: '{{ $id }}', current_value: {{ $currentValue ? "'".$currentValue."'" : 'null' }}, current_input: {{ $currentInput ? "'".$currentInput."'" : 'null' }}, options: {{ json_encode($options) }} })" x-init="init()">
     <div class="relative">
@@ -37,26 +42,28 @@
                 x-on:click="onSelectButtonClick"
                 x-on:keydown.arrow-down.prevent="onSelectButtonClick">
                     <span x-text="current_value"></span>
-                    <x-icons.down class="text-gray-500 absolute inset-y-0 right-1 my-auto z-10"></x-icons.down>
+                    <span x-show="!current_value" class="text-gray-500">{{ $placeholderText }}</span>
+                    <span class="opacity-0">&nbsp;</span>
+                    <x-icons.down class="text-gray-500 absolute inset-y-0 right-2 my-auto z-10"></x-icons.down>
             </button>
         @endif
     </div>
     <div x-show="show_options" x-cloak class="absolute z-10 w-full bg-white rounded-sm shadow-lg border">
-        <ul x-show="!!options_filtered.length" x-ref="listbox" class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:outline-none sm:text-sm sm:leading-5">
-            <template x-for="(option, index) in options_filtered">
-                <li x-bind:id="'{{ $id }}-option-'+index">
+        <ul x-show="!!filtered_option_ids.length" x-ref="listbox" class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:outline-none sm:text-sm sm:leading-5">
+            <template x-for="(optionID, index) in filtered_option_ids">
+                <li x-bind:id="'{{ $id }}-option-'+optionID">
                     <button type="button"
-                        x-text="option.item.name"
+                        x-text="options[optionID].name"
                         :class="{ 'text-white bg-indigo-600': index === focused_option_index, 'hover:bg-indigo-50': index !== focused_option_index }"
                         class="block w-full text-left py-1 px-3 text-base"
-                        x-on:mousedown.prevent="selectOption(index)"
+                        x-on:mousedown.prevent="selectOption(optionID, index)"
                         tabindex="-1"
                         ></button>
                 </li>
             </template>
         </ul>
-        <div x-show="!options_filtered.length" class="py-2 px-3 text-gray-500">
+        <div x-show="!filtered_option_ids.length" class="py-2 px-3 text-gray-500">
             {{ __('Nothing to show') }}
         </div>
-    </div>
+    </div>  
 </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Org;
+use App\Models\OrgType;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -31,12 +32,16 @@ class OrgController extends Controller
         $org->city = 'Montréal';
         $org->province = 'Québec';
         $org->country = 'Canada';
+        
+        $orgTypes = OrgType::all();
+        
         $data = [
             'isEdit' => false,
             'org' => $org,
             'cityOptions' => get_all_cities(),
             'provinceOptions' => get_all_provinces(),
             'countryOptions' => get_all_countries(),
+            'orgTypes' => $orgTypes,
         ];
         return view('orgs.create-edit')->with($data);
     }
@@ -51,6 +56,7 @@ class OrgController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'short_name' => 'nullable|string',
             'street_address' => 'nullable|string',
             'street_address_2' => 'nullable|string',
             'city' => 'nullable|string',
@@ -77,11 +83,14 @@ class OrgController extends Controller
             ],
             'email' => 'nullable|string|email',
             'notes' => 'nullable|string',
+            'type_ids' => 'nullable|array',
+            'type_ids.*' => 'integer|exists:org_types,id',
         ]);
         
         $org = new Org;
         $org->created_by_user_id = auth()->user()->id;
         $org->name = $request->name;
+        $org->short_name = $request->short_name;
         $org->street_address = $request->street_address;
         $org->street_address_2 = $request->street_address_2;
         $org->city = $request->city;
@@ -93,6 +102,8 @@ class OrgController extends Controller
         $org->email = $request->email;
         $org->notes = $request->notes;
         $org->save();
+        
+        $org->types()->sync($request->type_ids);
         
         return redirect()
             ->route('orgs.edit', ['org' => $org->id])
@@ -118,12 +129,14 @@ class OrgController extends Controller
      */
     public function edit(Org $org)
     {
+        $orgTypes = OrgType::all();
         $data = [
             'isEdit' => true,
             'org' => $org,
             'cityOptions' => get_all_cities(),
             'provinceOptions' => get_all_provinces(),
             'countryOptions' => get_all_countries(),
+            'orgTypes' => $orgTypes,
         ];
         return view('orgs.create-edit')->with($data);
     }
@@ -139,6 +152,7 @@ class OrgController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'short_name' => 'nullable|string',
             'street_address' => 'nullable|string',
             'street_address_2' => 'nullable|string',
             'city' => 'nullable|string',
@@ -165,11 +179,13 @@ class OrgController extends Controller
             ],
             'email' => 'nullable|string|email',
             'notes' => 'nullable|string',
+            'type_ids' => 'nullable|array',
+            'type_ids.*' => 'integer|exists:org_types,id',
         ]);
         
-        $org = new Org;
         $org->created_by_user_id = auth()->user()->id;
         $org->name = $request->name;
+        $org->short_name = $request->short_name;
         $org->street_address = $request->street_address;
         $org->street_address_2 = $request->street_address_2;
         $org->city = $request->city;
@@ -181,6 +197,8 @@ class OrgController extends Controller
         $org->email = $request->email;
         $org->notes = $request->notes;
         $org->save();
+        
+        $org->types()->sync($request->type_ids);
         
         return redirect()
             ->route('orgs.edit', ['org' => $org->id])

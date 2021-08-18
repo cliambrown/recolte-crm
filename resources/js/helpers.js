@@ -17,6 +17,11 @@ window.simpleSearchStr = function (str) {
         .toLowerCase().trim();
 }
 
+window.getAlpineObj = function (obj) {
+    if (typeof obj !== 'object') return obj;
+    return JSON.parse(JSON.stringify(obj));
+}
+
 window.getReadableAxiosError = function (error) {
     console.log(error ? error.toString() : 'getReadableAxiosError — unknown error');
     let message = "Sorry, an error occurred: \n";
