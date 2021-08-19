@@ -22,8 +22,11 @@
                 
                 <div class="shadow bg-white p-4 rounded my-4">
                     <div class="float-right ml-2 mb-2">
-                        <x-button href="{{ route('orgs.edit', ['org' => $org->id]) }}" padding="tight" btncolor="blue">
-                            {{ __('Edit Info') }}
+                        <x-button href="{{ route('orgs.show', ['org' => $org->id]) }}" padding="tight" btncolor="blue" class="mr-2">
+                            {{ __('View') }}
+                        </x-button>
+                        <x-button href="{{ route('orgs.edit', ['org' => $org->id]) }}" padding="tight" btncolor="green">
+                            {{ __('Edit') }}
                         </x-button>
                     </div>
                     <div class="font-bold text-gray-700">

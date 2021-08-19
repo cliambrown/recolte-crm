@@ -1,5 +1,7 @@
 <?php
 
+require_once './remove_accents.php';
+
 /**
  * Parse a url string and return the domain.
  *

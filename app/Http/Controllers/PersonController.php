@@ -114,4 +114,15 @@ class PersonController extends Controller
     {
         //
     }
+
+    /**
+     * Search people.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function api_search(Request $request)
+    {
+        
+    }
 }

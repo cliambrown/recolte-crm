@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\OrgController;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\PositionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,9 +19,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth'])->group(function () {
    
     Route::get('/', [PersonController::class, 'index'])->name('home');
-    Route::resource('people', PersonController::class)->except(['index','show']);
+    Route::resource('people', PersonController::class)->except(['index']);
+    Route::get('/people/$person/orgs/', [OrgController::class, 'people'])->name('orgs.people');
     
-    Route::resource('orgs', OrgController::class)->except(['show']);
+    Route::resource('orgs', OrgController::class);
+    Route::get('/orgs/$org/people/', [OrgController::class, 'people'])->name('orgs.people');
+    
+    Route::resource('positions', PositionController::class)->except(['index','show']);
     
 });
 

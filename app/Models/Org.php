@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Org extends Model
 {
     use HasFactory;
+    use SoftDeletes;
     
     public function setPhoneAttribute($value) {
         $phoneObj = get_valid_phone_obj($value);
@@ -56,5 +58,9 @@ class Org extends Model
     }
     public function getTypeNamesAttribute() {
         return $this->types->pluck('name')->toArray();
+    }
+    
+    public function people() {
+        return $this->belongsToMany(Person::class)->using(Position::class);
     }
 }

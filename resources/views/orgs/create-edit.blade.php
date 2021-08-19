@@ -7,6 +7,9 @@
                 {{ __('Add') }}
             @endif
             {{ __('Org') }}
+            @if ($isEdit)
+                : {{ $org->name }}
+            @endif
         </h2>
     </x-slot>
 
@@ -73,13 +76,6 @@
                     
                     <div class="mb-8 max-w-xs">
                         <x-label for="country" :value="__('Country')" />
-                        {{-- <x-input id="country" class="block mt-1 w-full" type="text" name="country" :value="old('country', $org->country)" /> --}}
-                        {{-- <x-select id="country" class="block mt-1 w-full" name="country">
-                            <option value="" {{ old('country', $org->country) === null ? 'selected' : '' }}></option>
-                            @foreach (get_all_countries() as $country)
-                                <option value="{{ $country }}" {{ old('country', $org->country) === $country ? 'selected' : '' }}>{{ $country }}</option>
-                            @endforeach
-                        </x-select> --}}
                         <div class="mt-1">
                             <x-suggest-input id="country" name="country" :currentValue="old('country', $org->country)" :currentInput="old('country', $org->country)" :options="$countryOptions" :asSelect="true" />
                         </div>

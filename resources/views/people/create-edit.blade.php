@@ -52,12 +52,6 @@
                         >{{ old('notes', $person->notes) }}</textarea>
                 </div>
                 
-                @if ($isEdit)
-                    
-                    
-                
-                @endif
-                
                 <div class="mb-8">
                     <x-button>{{ __('Save') }}</x-button>
                 </div>

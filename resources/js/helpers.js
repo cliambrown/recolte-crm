@@ -22,6 +22,11 @@ window.getAlpineObj = function (obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 
+window.copyToClipboard = function (text) {
+    console.log(text);
+    navigator.clipboard.writeText(text);
+}
+
 window.getReadableAxiosError = function (error) {
     console.log(error ? error.toString() : 'getReadableAxiosError — unknown error');
     let message = "Sorry, an error occurred: \n";

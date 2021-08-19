@@ -4,10 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Person extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    use Searchable;
+    
+    public function toSearchableArray()
+    {
+        $array = [];
+        $array['id'] = $this->id;
+        $attributes = [
+            'given_name',
+            'family_name',
+            'notes',
+            'org_names',
+        ];
+        foreach ($attributes as $attr) {
+            $value = remove_accents($this->$attr);
+            $array[$attr] = $value;
+        }
+        return $array;
+    }
     
     public function created_by_user() {
         return $this->belongsTo(User::class, 'created_by_user_id');
@@ -27,5 +48,13 @@ class Person extends Model
             return '[?]';
         }
         return $fn;
+    }
+    
+    public function orgs() {
+        return $this->belongsToMany(Org::class)->using(Position::class);
+    }
+    
+    public function getOrgNamesAttribute() {
+        // return $this->orgs->pluck('')
     }
 }

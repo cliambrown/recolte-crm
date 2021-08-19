@@ -16,6 +16,7 @@ class CreateOrgsTable extends Migration
         Schema::create('orgs', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignId('created_by_user_id');
             $table->string('name');
             $table->string('short_name')->nullable();

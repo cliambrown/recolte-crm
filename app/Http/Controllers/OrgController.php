@@ -110,16 +110,17 @@ class OrgController extends Controller
             ->with('status', __('New org saved.'));
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  \App\Models\Org  $org
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show(Org $org)
-    // {
-    //     //
-    // }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Org  $org
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Org $org)
+    {
+        $org->load('types','people');
+        return view('orgs.show')->with(['org' => $org]);
+    }
 
     /**
      * Show the form for editing the specified resource.
