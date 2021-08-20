@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Org;
 use App\Models\Person;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PersonController extends Controller
 {
@@ -28,7 +30,14 @@ class PersonController extends Controller
     public function create()
     {
         $person = new Person;
-        return view('people.create-edit')->with(['isEdit' => false, 'person' => $person]);
+        $data = [
+            'isEdit' => false,
+            'person' => $person,
+            'cityOptions' => get_all_cities(),
+            'provinceOptions' => get_all_provinces(),
+            'countryOptions' => get_all_countries(),
+        ];
+        return view('people.create-edit')->with($data);
     }
 
     /**
@@ -43,6 +52,31 @@ class PersonController extends Controller
             'given_name' => 'required_without:family_name|nullable|string',
             'family_name' => 'required_without:given_name|nullable|string',
             'notes' => 'nullable|string',
+            'street_address' => 'nullable|string',
+            'street_address_2' => 'nullable|string',
+            'city' => 'nullable|string',
+            'province' => 'nullable|string',
+            'postal_code' => 'nullable|string',
+            'country' => [
+                'nullable',
+                'string',
+                Rule::in(get_all_countries()),
+            ],
+            'website' => 'nullable|string|url',
+            'phone' => [
+                'nullable',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (gettype($value) !== 'string') return true;
+                    $value = trim($value);
+                    if (!$value) return true;
+                    $phoneObj = get_valid_phone_obj($value);
+                    if ($phoneObj === null) {
+                        $fail(__('Invalid phone number'));
+                    }
+                },
+            ],
+            'email' => 'nullable|string|email',
         ]);
         
         $person = new Person;
@@ -50,6 +84,15 @@ class PersonController extends Controller
         $person->given_name = $request->given_name;
         $person->family_name = $request->family_name;
         $person->notes = $request->notes;
+        $person->street_address = $request->street_address;
+        $person->street_address_2 = $request->street_address_2;
+        $person->city = $request->city;
+        $person->province = $request->province;
+        $person->postal_code = $request->postal_code;
+        $person->country = $request->country;
+        $person->website = $request->website;
+        $person->phone = $request->phone;
+        $person->email = $request->email;
         $person->save();
         
         return redirect()
@@ -57,16 +100,18 @@ class PersonController extends Controller
             ->with('status', __('New person saved.'));
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  \App\Models\Person  $person
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show(Person $person)
-    // {
-    //     //
-    // }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Person  $person
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Person $person)
+    {
+        $person->load('orgs');
+        // $person->org_names;
+        return view('people.show')->with(['person' => $person]);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -76,7 +121,14 @@ class PersonController extends Controller
      */
     public function edit(Person $person)
     {
-        return view('people.create-edit')->with(['isEdit' => false, 'person' => $person]);
+        $data = [
+            'isEdit' => true,
+            'person' => $person,
+            'cityOptions' => get_all_cities(),
+            'provinceOptions' => get_all_provinces(),
+            'countryOptions' => get_all_countries(),
+        ];
+        return view('people.create-edit')->with($data);
     }
 
     /**
@@ -92,11 +144,45 @@ class PersonController extends Controller
             'given_name' => 'required_without:family_name|nullable|string',
             'family_name' => 'required_without:given_name|nullable|string',
             'notes' => 'nullable|string',
+            'street_address' => 'nullable|string',
+            'street_address_2' => 'nullable|string',
+            'city' => 'nullable|string',
+            'province' => 'nullable|string',
+            'postal_code' => 'nullable|string',
+            'country' => [
+                'nullable',
+                'string',
+                Rule::in(get_all_countries()),
+            ],
+            'website' => 'nullable|string|url',
+            'phone' => [
+                'nullable',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (gettype($value) !== 'string') return true;
+                    $value = trim($value);
+                    if (!$value) return true;
+                    $phoneObj = get_valid_phone_obj($value);
+                    if ($phoneObj === null) {
+                        $fail(__('Invalid phone number'));
+                    }
+                },
+            ],
+            'email' => 'nullable|string|email',
         ]);
         
         $person->given_name = $request->given_name;
         $person->family_name = $request->family_name;
         $person->notes = $request->notes;
+        $person->street_address = $request->street_address;
+        $person->street_address_2 = $request->street_address_2;
+        $person->city = $request->city;
+        $person->province = $request->province;
+        $person->postal_code = $request->postal_code;
+        $person->country = $request->country;
+        $person->website = $request->website;
+        $person->phone = $request->phone;
+        $person->email = $request->email;
         $person->save();
         
         return redirect()
@@ -123,6 +209,7 @@ class PersonController extends Controller
      */
     public function api_search(Request $request)
     {
-        
+        // $orgs = Org::search($request->search)->get();
+        // return response()->json(['orgs' => $orgs]);
     }
 }

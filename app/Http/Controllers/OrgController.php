@@ -29,7 +29,7 @@ class OrgController extends Controller
     public function create()
     {
         $org = new Org;
-        $org->city = 'Montréal';
+        // $org->city = 'Montréal';
         $org->province = 'Québec';
         $org->country = 'Canada';
         
@@ -215,5 +215,17 @@ class OrgController extends Controller
     public function destroy(Org $org)
     {
         //
+    }
+
+    /**
+     * Search orgs.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function api_search(Request $request)
+    {
+        $orgs = Org::search($request->search)->get();
+        return response()->json($orgs);
     }
 }

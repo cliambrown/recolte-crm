@@ -19,7 +19,7 @@
             <!-- Validation Errors -->
             <x-auth-validation-errors class="mb-4" :errors="$errors" />
             
-            <form method="POST" action="{{ $isEdit ? route('positions.update', ['position' => $person->id]) : route('positions.store') }}">
+            <form method="POST" action="{{ $isEdit ? route('positions.update', ['position' => $position->id]) : route('positions.store') }}">
                 
                 @csrf
                 
@@ -27,11 +27,31 @@
                     @method('PUT')
                 @endif
                 
-                <div class="mb-8 max-w-xs">
-                    <x-label for="country" :value="__('Country')" />
-                    <div class="mt-1">
-                        <x-suggest-input id="country" name="country" :currentValue="old('country', $org->country)" :currentInput="old('country', $org->country)" :options="$countryOptions" :asSelect="true" />
-                    </div>
+                <div class="mb-8 max-w-md">
+                    <x-label for="person" :value="__('Person')" />
+                </div>
+                
+                <div class="mb-8 max-w-md">
+                    <x-label for="org_id" :value="__('Org')" />
+                    @if ($org !== null)
+                        <x-input id="org" class="block mt-1 w-full" type="text" name="org_id" :value="$org->name" readonly />
+                    @else
+                        <div class="mt-1">
+                            <x-suggest-input id="org_id"
+                                name="country"
+                                :initValue="old('org_id')"
+                                :optionsUrl="route('orgs.api_search')"
+                                placeholderText="{{ __('Search') }}"
+                                :asSelect="true" />
+                            {{-- <x-suggest-input id="org_id"
+                                name="org_id"
+                                :currentValue="old('org_id', $position->org_id)"
+                                :optionsUrl="route('orgs.api_search')"
+                                labelAttr="name"
+                                placeholderText="{{ __('Search') }}"
+                                :asSelect="true" /> --}}
+                        </div>
+                    @endif
                 </div>
                 
                 <div class="mb-8">

@@ -63,21 +63,21 @@
                     <div class="mb-8 max-w-xs">
                         <x-label for="city" :value="__('City')" />
                         <div class="mt-1">
-                            <x-suggest-input id="city" name="city" :currentInput="old('city', $org->city)" :options="$cityOptions" />
+                            <x-suggest-input id="city" name="city" :initValue="old('city', $org->city)" :options="$cityOptions" />
                         </div>
                     </div>
                     
                     <div class="mb-8 max-w-xs">
                         <x-label for="province" :value="__('Province')" />
                         <div class="mt-1">
-                            <x-suggest-input id="province" name="province" :currentInput="old('province', $org->province)" :options="$provinceOptions" />
+                            <x-suggest-input id="province" name="province" :initValue="old('province', $org->province)" :options="$provinceOptions" />
                         </div>
                     </div>
                     
                     <div class="mb-8 max-w-xs">
                         <x-label for="country" :value="__('Country')" />
                         <div class="mt-1">
-                            <x-suggest-input id="country" name="country" :currentValue="old('country', $org->country)" :currentInput="old('country', $org->country)" :options="$countryOptions" :asSelect="true" />
+                            <x-suggest-input id="country" name="country" :initValue="old('country', $org->country)" :options="$countryOptions" :asSelect="true" />
                         </div>
                     </div>
                     

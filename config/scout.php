@@ -151,7 +151,7 @@ return [
             'max_expansions' => 50,
             'distance' => 2
         ],
-        'asYouType' => false,
+        'asYouType' => env('TNTSEARCH_ASYOUTYPE', false),
         'searchBoolean' => env('TNTSEARCH_BOOLEAN', false),
         'maxDocs' => env('TNTSEARCH_MAX_DOCS', 500),
     ],

@@ -26,22 +26,23 @@ class PositionController extends Controller
      */
     public function create()
     {
+        $position = new Position;
+        
         $org = null;
         $orgID = data_get($_GET, 'org');
         if ($orgID) {
             $org = Org::find($orgID);
         }
-        if (!$org) $org = new Org;
 
         $person = null;
         $personID = data_get($_GET, 'person');
         if ($personID) {
             $person = Person::find($personID);
         }
-        if (!$person) $person = new Person();
 
         $data = [
             'isEdit' => false,
+            'position' => $position,
             'org' => $org,
             'person' => $person,
         ];
@@ -57,7 +58,9 @@ class PositionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'test' => 'required',
+        ]);
     }
 
     // /**

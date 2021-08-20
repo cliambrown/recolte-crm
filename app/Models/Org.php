@@ -5,11 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Org extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Searchable;
+    
+    public function toSearchableArray()
+    {
+        $array = [];
+        $array['id'] = $this->id;
+        $attributes = [
+            'name',
+            'short_name',
+            'website',
+            // 'org_names',
+        ];
+        foreach ($attributes as $attr) {
+            $value = remove_accents($this->$attr);
+            $array[$attr] = $value;
+        }
+        return $array;
+    }
     
     public function setPhoneAttribute($value) {
         $phoneObj = get_valid_phone_obj($value);
@@ -61,6 +80,6 @@ class Org extends Model
     }
     
     public function people() {
-        return $this->belongsToMany(Person::class)->using(Position::class);
+        return $this->belongsToMany(Person::class, 'positions')->using(Position::class);
     }
 }

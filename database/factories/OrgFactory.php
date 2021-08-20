@@ -21,7 +21,6 @@ class OrgFactory extends Factory
      */
     public function definition()
     {
-        
         $phoneObj = get_valid_phone_obj($this->faker->e164PhoneNumber());
         $phone = get_readable_phone($phoneObj);
         
