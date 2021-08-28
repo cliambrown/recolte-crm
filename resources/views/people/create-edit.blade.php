@@ -57,25 +57,25 @@
                 </h3>
                 
                 <p class="text-purple-600 mb-6">
-                    {{ __('The fields below are for PERSONAL info only (e.g. name@gmail.com). Details related to a specific org (e.g. position@company.org) should be saved with this person\'s Positions.') }}
+                    {{ __('The fields below are for PERSONAL info only (e.g. name@gmail.com). Details related to a specific org (e.g. position@company.org) should be saved with this person\'s positions.') }}
                 </p>
                 
                 <div class="md:grid md:gap-4 md:grid-cols-2">
-                
-                    <div class="mb-8">
-                        <x-label for="phone" :value="__('Phone')" />
-                        <x-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone', $person->phone)" />
-                    </div>
                     
                     <div class="mb-8">
-                        <x-label for="email" :value="__('Main Email')" />
+                        <x-label for="email" :value="__('Personal Email')" />
                         <x-input id="email" class="block mt-1 w-full" type="text" name="email" :value="old('email', $person->email)" />
+                    </div>
+                
+                    <div class="mb-8">
+                        <x-label for="phone" :value="__('Personal Phone')" />
+                        <x-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone', $person->phone)" />
                     </div>
                     
                 </div>
                 
                 <div class="mb-8">
-                    <x-label for="website" :value="__('Website')" />
+                    <x-label for="website" :value="__('Personal Website')" />
                     <x-input id="website" class="block mt-1 w-full" type="text" name="website" :value="old('website', $person->website)" />
                 </div>
                 

@@ -94,15 +94,15 @@
                 </div>
                 
                 <div class="md:grid md:gap-4 md:grid-cols-2">
+                    
+                    <div class="mb-8">
+                        <x-label for="email" :value="__('General Email')" />
+                        <x-input id="email" class="block mt-1 w-full" type="text" name="email" :value="old('email', $org->email)" />
+                    </div>
                 
                     <div class="mb-8">
                         <x-label for="phone" :value="__('Phone')" />
                         <x-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone', $org->phone)" />
-                    </div>
-                    
-                    <div class="mb-8">
-                        <x-label for="email" :value="__('Main Email')" />
-                        <x-input id="email" class="block mt-1 w-full" type="text" name="email" :value="old('email', $org->email)" />
                     </div>
                     
                 </div>

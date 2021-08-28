@@ -4,24 +4,16 @@
             <span class="text-gray-500 mr-3 font-normal">
                 {{ __('Person') }}
             </span>
-            {{ $person->name }}
-            @if ($person->short_name)
-            <span class="text-gray-500 ml-3">
-                — {{ $person->short_name }}
-            </span>
-            @endif
+            {{ $person->full_name }}
         </h2>
     </x-slot>
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div>
-                <h3 class="inline-block font-semibold text-lg text-gray-800 leading-tight mb-3">
-                    {{ __('Info') }}
-                </h3>
-                <x-button href="{{ route('people.edit', ['person' => $person->id]) }}" btncolor="blue" padding="tight" class="relative bottom-1 ml-8">
-                    Edit
+            <div class="mb-4">
+                <x-button href="{{ route('people.edit', ['person' => $person->id]) }}" btncolor="blue" padding="tight" class="">
+                    Edit Info
                 </x-button>
             </div>
             
@@ -71,13 +63,45 @@
             @endif
             
             <div>
-                <h3 class="inline-block font-semibold text-lg text-gray-800 leading-tight mt-8 mb-3">
-                    {{ __('Positions') }}
-                </h3>
-                <x-button href="{{ route('positions.create') }}?person={{ $person->id }}" padding="tight" class="relative bottom-1 ml-8">
-                    <x-icons.plus></x-icons.plus> {{ __('Add') }}
+                <x-button href="{{ route('positions.create') }}?person={{ $person->id }}" padding="tight" class="mt-10">
+                    <x-icons.plus></x-icons.plus> {{ __('Add Position') }}
                 </x-button>
             </div>
+            
+            @foreach ($person->positions as $position)
+                <div class="my-6">
+                    @if ($position->is_current)
+                        <div class="text-purple-500 font-semibold uppercase text-sm mb-1">
+                            {{ __('Current') }}
+                        </div>
+                    @endif
+                    <div>
+                        @if ($position->title)
+                            <span class="mr-2">{{ $position->title }}</span>
+                            <span class="text-gray-500 mr-2">{{ __('at') }}</span>
+                        @endif
+                        <x-link href="{{ route('orgs.show', ['org' => $position->org->id]) }}">
+                            {{ $position->org->name }}
+                        </x-link>
+                        
+                        <x-button href="{{ route('positions.edit', ['position' => $position->id]) }}" class="ml-4" padding="tight" btncolor="green">
+                            {{ __('Edit') }}
+                        </x-button>
+                    </div>
+                    <div class="text-gray-600 text-sm">
+                        @if ($position->start_date_str)
+                            <span class="font-semibold mr-2">{{ $position->start_date_str }}</span>
+                        @endif
+                        @if ($position->end_date_str)
+                            <span class="text-gray-500 mr-2">{{ __('until') }}</span>
+                            <span class="font-semibold mr-2">{{ $position->end_date_str }}</span>
+                        @endif
+                    </div>
+                    <div class="mt-1">
+                        {{-- Contact info --}}
+                    </div>
+                </div>
+            @endforeach
             
         </div>
     </div>

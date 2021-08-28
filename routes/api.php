@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\OrgController;
+use App\Http\Controllers\PersonController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     
+    Route::post('/people/search', [PersonController::class, 'api_search'])->name('people.api_search');
     Route::post('/orgs/search', [OrgController::class, 'api_search'])->name('orgs.api_search');
     
 });

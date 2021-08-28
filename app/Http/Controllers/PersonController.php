@@ -96,7 +96,7 @@ class PersonController extends Controller
         $person->save();
         
         return redirect()
-            ->route('people.edit', ['person' => $person->id])
+            ->route('people.show', ['person' => $person->id])
             ->with('status', __('New person saved.'));
     }
 
@@ -108,7 +108,7 @@ class PersonController extends Controller
      */
     public function show(Person $person)
     {
-        $person->load('orgs');
+        $person->load('positions.org');
         // $person->org_names;
         return view('people.show')->with(['person' => $person]);
     }
@@ -186,7 +186,7 @@ class PersonController extends Controller
         $person->save();
         
         return redirect()
-            ->route('people.edit', ['person' => $person->id])
+            ->route('people.show', ['person' => $person->id])
             ->with('status', __('Person updated.'));
     }
 
@@ -209,7 +209,7 @@ class PersonController extends Controller
      */
     public function api_search(Request $request)
     {
-        // $orgs = Org::search($request->search)->get();
-        // return response()->json(['orgs' => $orgs]);
+        $people = Person::search($request->search)->get();
+        return response()->json($people);
     }
 }

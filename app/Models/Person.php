@@ -13,6 +13,8 @@ class Person extends Model
     use SoftDeletes;
     use Searchable;
     
+    protected $appends = ['full_name'];
+    
     public function toSearchableArray()
     {
         $array = [];
@@ -47,6 +49,10 @@ class Person extends Model
             return '[?]';
         }
         return $fn;
+    }
+    
+    public function getFullNameAttribute() {
+        return $this->display_given_name.' '.$this->display_family_name;
     }
     
     public function setPhoneAttribute($value) {
@@ -87,17 +93,41 @@ class Person extends Model
         return implode(', ', $parts);
     }
     
-    public function getBylineAttribute() {
-        return $this->display_given_name.' '.$this->display_family_name;
+    public function positions() {
+        return $this->hasMany(Position::class)
+            ->orderBy('start_year', 'desc')
+            ->orderBy('start_month', 'desc')
+            ->orderBy('start_day', 'desc')
+            ->orderBy('end_year', 'desc')
+            ->orderBy('end_month', 'desc')
+            ->orderBy('end_day', 'desc');
     }
     
-    public function orgs() {
-        return $this->belongsToMany(Org::class, 'positions')->using(Position::class);
+    public function current_position() {
+        return $this->hasMany(Position::class)
+            ->where('is_current', 1)
+            ->orderBy('start_year', 'desc')
+            ->orderBy('start_month', 'desc')
+            ->orderBy('start_day', 'desc')
+            ->orderBy('end_year', 'desc')
+            ->orderBy('end_month', 'desc')
+            ->orderBy('end_day', 'desc')
+            ->first();
+            
     }
     
-    public function getOrgNamesAttribute() {
-        $names = $this->orgs->pluck('name', 'short_name');
-        dd($names);
-        return $names;
+    public function getCurrentPositionAttribute() {
+        if ($this->relationLoaded('positions')) {
+            return $this->positions->firstWhere('is_current');
+        }
+        return $this->positions()
+            ->where('is_current', 1)
+            ->first();
     }
+    
+    // public function getOrgNamesAttribute() {
+    //     $names = $this->orgs->pluck('name', 'short_name');
+    //     dd($names);
+    //     return $names;
+    // }
 }

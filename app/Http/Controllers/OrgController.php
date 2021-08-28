@@ -106,7 +106,7 @@ class OrgController extends Controller
         $org->types()->sync($request->type_ids);
         
         return redirect()
-            ->route('orgs.edit', ['org' => $org->id])
+            ->route('orgs.show', ['org' => $org->id])
             ->with('status', __('New org saved.'));
     }
 
@@ -202,7 +202,7 @@ class OrgController extends Controller
         $org->types()->sync($request->type_ids);
         
         return redirect()
-            ->route('orgs.edit', ['org' => $org->id])
+            ->route('orgs.show', ['org' => $org->id])
             ->with('status', __('Org updated.'));
     }
 

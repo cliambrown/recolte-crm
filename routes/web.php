@@ -26,6 +26,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orgs/$org/people/', [OrgController::class, 'people'])->name('orgs.people');
     
     Route::resource('positions', PositionController::class)->except(['index','show']);
+    Route::get('/positions/{position}/confirm-current/{isCurrent}', [PositionController::class, 'confirm_current'])->name('positions.confirm_current');
+    Route::put('/positions/{position}/update-current', [PositionController::class, 'update_current'])->name('positions.update_current');
     
 });
 

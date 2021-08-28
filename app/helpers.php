@@ -3,6 +3,20 @@
 require_once 'remove_accents.php';
 
 /**
+ * Parse a value from a request and return a boolean
+ *
+ * @param  Mixed  $value
+ * @return Boolean
+ */
+function get_request_boolean($value) {
+    if ($value === true) return true;
+    if ($value === 'true') return true;
+    if ($value === 1) return true;
+    if ($value === '1') return true;
+    return false;
+}
+
+/**
  * Parse a url string and return the domain.
  *
  * @param  String  $str
@@ -15,6 +29,18 @@ function get_domain($str) {
     $domain = $parsed['host'];
     if (substr($domain, 0, 4) === 'www.') $domain = substr($domain, 4);
     return $domain;
+}
+
+/**
+ * Determine whether a url belongs to this site's domain.
+ *
+ * @param  String  $str
+ * @return String
+ */
+function is_this_domain($str) {
+    $domain = get_domain($str);
+    $thisDomain = env('APP_URL');
+    return \Illuminate\Support\Str::startsWith($domain, $thisDomain);
 }
 
 /**
@@ -45,6 +71,24 @@ function get_all_provinces() {
         "Québec","Alberta","Colombie-Britannique","Île-du-Prince-Édouard","Manitoba","Nouveau-Brunswick","Nouvelle-Écosse","Ontario","Saskatchewan","Terre-Neuve-et-Labrador","Nunavut","Territoires du Nord-Ouest","Yukon",
         "Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming",
     ];
+}
+
+/**
+ * Returns the max year that can currently be used for position dates
+ *
+ * @return Int
+ */
+function get_max_year() {
+    return intval(now()->year) + 2;
+}
+
+/**
+ * Returns the min year that can currently be used for position dates
+ *
+ * @return Int
+ */
+function get_min_year() {
+    return 1970;
 }
 
 /**

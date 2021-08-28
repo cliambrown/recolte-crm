@@ -16,10 +16,13 @@ class CreatePositionsTable extends Migration
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignId('org_id');
             $table->foreignId('person_id');
-            $table->string('title');
+            $table->boolean('is_current')->nullable();
+            $table->string('title')->nullable();
             $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->unsignedSmallInteger('start_year')->nullable();
             $table->unsignedTinyInteger('start_month')->nullable();
             $table->unsignedTinyInteger('start_day')->nullable();

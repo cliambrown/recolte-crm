@@ -13,6 +13,8 @@ class Org extends Model
     use SoftDeletes;
     use Searchable;
     
+    protected $appends = ['name_with_short_name'];
+    
     public function toSearchableArray()
     {
         $array = [];
@@ -66,6 +68,15 @@ class Org extends Model
         if ($this->country) $parts[] = $this->country;
         if ($this->postal_code) $parts[] = $this->postal_code;
         return implode(', ', $parts);
+    }
+    
+    // Returns "name (short_name)", mostly for searching
+    public function getNameWithShortNameAttribute() {
+        $fullName = $this->name;
+        if ($this->short_name) {
+            $fullName .= ' ('.$this->short_name.')';
+        }
+        return $fullName;
     }
     
     public function types() {

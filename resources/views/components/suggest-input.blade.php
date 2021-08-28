@@ -95,11 +95,13 @@
     
     <div x-show="show_options" x-cloak class="absolute z-10 w-full bg-white rounded-sm shadow-lg border">
         @if ($optionsUrl)
-            <div x-show="options_loading">
-                {{ __('Loading') }}...
-            </div>
+            <ul x-show="options_loading" class="py-1 overflow-auto text-sm leading-5 max-h-60 focus:outline-none">
+                <li class="py-2 px-3 text-gray-500">
+                    {{ __('Loading') }}...
+                </li>
+            </ul>
         @endif
-        <ul x-show="!options_loading" x-ref="listbox" class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:outline-none sm:text-sm sm:leading-5">
+        <ul x-show="!options_loading" x-ref="listbox" class="py-1 overflow-auto text-sm leading-5 max-h-60 focus:outline-none">
             <li x-show="!filtered_option_ids.length" class="py-2 px-3 text-gray-500">
                 {{ __('No results') }}
             </li>
