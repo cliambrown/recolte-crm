@@ -40,19 +40,19 @@
                         <div class="-mx-1">
                             @if ($org->website)
                                 <a href="{{ $org->website }}" target="_blank" class="cursor-pointer mx-1">
-                                    <x-icons.link class="inline w-4 h-4 relative bottom-[1px] text-gray-400"></x-icons.link>
+                                    <x-icons.globe class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.globe>
                                     {{ get_domain($org->website) }}
                                 </a>
                             @endif
                             @if ($org->one_line_address)
                                 <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($org->one_line_address) }}" target="_blank" class="cursor-pointer mx-1">
-                                    <x-icons.location-marker class="inline w-4 h-4 relative bottom-[1px] text-gray-400"></x-icons.location-marker>
+                                    <x-icons.location-marker class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.location-marker>
                                     {{ $org->one_line_address }}
                                 </a>
                             @endif
                             @if ($org->readable_phone)
                                 <a href="tel:{{ $org->readable_phone }}" class="cursor-pointer mx-1">
-                                    <x-icons.phone class="inline w-4 h-4 relative bottom-[1px] text-gray-400"></x-icons.phone>
+                                    <x-icons.phone class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.phone>
                                     {{ $org->readable_phone }}
                                 </a>
                             @endif

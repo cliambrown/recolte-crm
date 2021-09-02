@@ -61,6 +61,41 @@ class PositionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param  \App\Models\Position  $position
+     * @param  string  $redirectUrl
+     * @return \Illuminate\Http\Response
+     */
+    private static function doCheckCurrentPosition(Position $position, string $redirectUrl) {
+        $person = $position->person;
+        if (!$person) return false;
+        $person->load('positions.org');
+        $positions = $person->positions;
+        if ($positions->isEmpty()) return false;
+        $currentPosition = $person->getCurrentPosition();
+        $problem = null;
+        if ($currentPosition) {
+            if ($currentPosition->end_date->isFuture()) return false;
+            $problem = 'current_expired';
+        } else {
+            $unFinishedPosition = $positions->first(function ($thisPost, $key) {
+                return $thisPost->end_date->isFuture();
+            });
+            if (!$unFinishedPosition) return false;
+            $problem = 'unfinished_position';
+        }
+        
+        $data = [
+            'person' => $person->id,
+            'problem' => $problem,
+            'url' => $redirectUrl,
+        ];
+        return redirect()->route('positions.confirm_current', $data)
+            ->with('status', __('Position updated.'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
      * @param  \Illuminate\Http\PositionPostRequest  $request
      * @return \Illuminate\Http\Response
      */
@@ -85,12 +120,12 @@ class PositionController extends Controller
         $requestRedirectUrl = $request->redirect_url;
         if (is_this_domain($requestRedirectUrl)) $redirectUrl = $requestRedirectUrl;
         
-        // Prompt if is_current but end_date is past
-        // or if not is_current but end_date is null
-        if ($position->is_current) {
-            Position::where('person_id', $position->person_id)
-                ->update(['is_current' => null]);
-        }
+        // // Prompt if is_current but end_date is past
+        // // or if not is_current but end_date is null
+        // if ($position->is_current) {
+        //     Position::where('person_id', $position->person_id)
+        //         ->update(['is_current' => null]);
+        // }
         
         return redirect($redirectUrl)
             ->with('status', __('Position created.'));
@@ -149,6 +184,7 @@ class PositionController extends Controller
         $position->person_id = $request->person_id;
         $position->org_id = $request->org_id;
         $position->title = $request->title;
+        $position->is_current = get_request_boolean($request->is_current);
         $position->email = $request->email;
         $position->start_year = $request->start_year;
         $position->start_month = $request->start_month;
@@ -163,30 +199,9 @@ class PositionController extends Controller
         $requestRedirectUrl = $request->redirect_url;
         if (is_this_domain($requestRedirectUrl)) $redirectUrl = $requestRedirectUrl;
         
-        $isCurrent = get_request_boolean($request->is_current);
-        if ($isCurrent) {
-            $endDate = Carbon::parse($request->validated()['end_date']);
-            if ($request->end_year && $endDate->isPast()) {
-                $redirectData = [
-                    'position' => $position->id,
-                    'isCurrent' => 'true',
-                ];
-                return redirect()->route('positions.confirm_current', $redirectData)
-                    ->with('status', __('Position updated.'));
-            } else {
-                Position::where('person_id', $position->person_id)
-                    ->update(['is_current' => null]);
-            }
-        } else {
-            $endDate = Carbon::parse($request->validated()['end_date']);
-            if ($endDate->isFuture()) {
-                $redirectData = [
-                    'position' => $position->id,
-                    'isCurrent' => 'false',
-                ];
-                return redirect()->route('positions.confirm_current', $redirectData)
-                    ->with('status', __('Position updated.'));
-            }
+        $response = $this->doCheckCurrentPosition($position, $redirectUrl);
+        if ($response !== false) {
+            return $response;
         }
         
         return redirect($redirectUrl)
@@ -196,16 +211,18 @@ class PositionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Position  $position
-     * @param  Boolean  $isCurrent
+     * @param  \App\Models\Person  $person
      * @return \Illuminate\Http\Response
      */
-    public function confirm_current(Position $position, $isCurrent)
+    public function confirm_current(Person $person)
     {
-        $isCurrent = get_request_boolean($isCurrent);
+        $person->load('positions.org');
+        $currentPosition = $person->getCurrentPosition();
         $data = [
-            'position' => $position,
-            'isCurrent' => $isCurrent,
+            'person' => $person,
+            'problem' => data_get($_GET, 'problem'),
+            'redirectUrl' => data_get($_GET, 'url'),
+            'currentPosition' => $currentPosition,
         ];
         return view('positions.confirm-current')->with($data);
     }

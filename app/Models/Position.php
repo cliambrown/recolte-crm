@@ -74,9 +74,9 @@ class Position extends Model
         if ($this->start_year) {
             $str = $this->start_year;
             if ($this->start_month) {
-                $str .= '/'.$this->start_month;
+                $str .= '/'.sprintf("%02d", $this->start_month);
                 if ($this->start_day) {
-                    $str .= '/'.$this->start_day;
+                    $str .= '/'.sprintf("%02d", $this->start_day);
                 }
             }
         }
@@ -88,9 +88,9 @@ class Position extends Model
         if ($this->end_year) {
             $str = $this->end_year;
             if ($this->end_month) {
-                $str .= '/'.$this->end_month;
+                $str .= '/'.sprintf("%02d", $this->end_month);
                 if ($this->end_day) {
-                    $str .= '/'.$this->end_day;
+                    $str .= '/'.sprintf("%02d", $this->end_day);
                 }
             }
         }

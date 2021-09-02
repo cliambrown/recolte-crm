@@ -104,25 +104,16 @@ class Person extends Model
     }
     
     public function current_position() {
-        return $this->hasMany(Position::class)
+        return $this->positions()
             ->where('is_current', 1)
-            ->orderBy('start_year', 'desc')
-            ->orderBy('start_month', 'desc')
-            ->orderBy('start_day', 'desc')
-            ->orderBy('end_year', 'desc')
-            ->orderBy('end_month', 'desc')
-            ->orderBy('end_day', 'desc')
-            ->first();
-            
+            ->limit(1);
     }
     
-    public function getCurrentPositionAttribute() {
+    public function getCurrentPosition() {
         if ($this->relationLoaded('positions')) {
             return $this->positions->firstWhere('is_current');
         }
-        return $this->positions()
-            ->where('is_current', 1)
-            ->first();
+        return $this->current_position()->get();
     }
     
     // public function getOrgNamesAttribute() {

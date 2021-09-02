@@ -20,14 +20,12 @@ Route::middleware(['auth'])->group(function () {
    
     Route::get('/', [PersonController::class, 'index'])->name('home');
     Route::resource('people', PersonController::class)->except(['index']);
-    Route::get('/people/$person/orgs/', [OrgController::class, 'people'])->name('orgs.people');
     
     Route::resource('orgs', OrgController::class);
-    Route::get('/orgs/$org/people/', [OrgController::class, 'people'])->name('orgs.people');
     
     Route::resource('positions', PositionController::class)->except(['index','show']);
-    Route::get('/positions/{position}/confirm-current/{isCurrent}', [PositionController::class, 'confirm_current'])->name('positions.confirm_current');
-    Route::put('/positions/{position}/update-current', [PositionController::class, 'update_current'])->name('positions.update_current');
+    Route::get('/people/{person}/confirm-current-position', [PositionController::class, 'confirm_current'])->name('positions.confirm_current');
+    Route::put('/people/{person}/confirm-current-position', [PositionController::class, 'update_current'])->name('positions.update_current');
     
 });
 

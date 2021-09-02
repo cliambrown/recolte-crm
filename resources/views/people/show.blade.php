@@ -19,7 +19,7 @@
             
             @if ($person->website)
                 <div class="my-2">
-                    <x-icons.link class="inline w-4 h-4 relative bottom-[1px] text-gray-500"></x-icons.link>
+                    <x-icons.globe class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.globe>
                     <x-link href="{{ $person->website }}" target="_blank">
                         {{ get_domain($person->website) }}
                     </x-link>
@@ -28,7 +28,7 @@
             
             @if ($person->one_line_address)
                 <div class="my-2" x-data="{ show: false }">
-                    <x-icons.location-marker class="inline w-4 h-4 relative bottom-[1px] text-gray-400"></x-icons.location-marker>
+                    <x-icons.location-marker class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.location-marker>
                     {{ $person->one_line_address }}
                     <x-link href="https://www.google.com/maps/search/?api=1&query={{ urlencode($person->one_line_address) }}" target="_blank" class="ml-2">
                         Maps
@@ -44,9 +44,18 @@
                 </div>
             @endif
             
+            @if ($person->email)
+                <div class="my-2">
+                    <x-icons.at class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.at>
+                    <x-link href="mailto:{{ $person->email }}" target="_blank">
+                        {{ $person->email }}
+                    </x-link>
+                </div>
+            @endif
+            
             @if ($person->readable_phone)
                 <div class="my-2" x-data="{ show: false }">
-                    <x-icons.phone class="inline w-4 h-4 relative bottom-[1px] text-gray-400"></x-icons.phone>
+                    <x-icons.phone class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.phone>
                     {{ $person->readable_phone }}
                     <x-link href="https://www.google.com/maps/search/?api=1&query={{ urlencode($person->one_line_address) }}" target="_blank" class="ml-2">
                         Call
@@ -97,9 +106,14 @@
                             <span class="font-semibold mr-2">{{ $position->end_date_str }}</span>
                         @endif
                     </div>
-                    <div class="mt-1">
-                        {{-- Contact info --}}
-                    </div>
+                    @if ($position->email)
+                        <div class="mt-1">
+                            <x-icons.at class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.at>
+                            <x-link href="mailto:{{ $position->email }}" target="_blank">
+                                {{ $position->email }}
+                            </x-link>
+                        </div>
+                    @endif
                 </div>
             @endforeach
             
