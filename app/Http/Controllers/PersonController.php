@@ -16,7 +16,8 @@ class PersonController extends Controller
      */
     public function index()
     {
-        $people = Person::orderBy('family_name')
+        $people = Person::with('current_position.org')
+            ->orderBy('family_name')
             ->orderBy('given_name')
             ->paginate('20');
         return view('people.index')->with(['people' => $people]);
@@ -109,8 +110,11 @@ class PersonController extends Controller
     public function show(Person $person)
     {
         $person->load('positions.org');
-        // $person->org_names;
-        return view('people.show')->with(['person' => $person]);
+        $currentPosition = $person->getCurrentPosition();
+        return view('people.show')->with([
+            'person' => $person,
+            'currentPosition' => $currentPosition,
+        ]);
     }
 
     /**

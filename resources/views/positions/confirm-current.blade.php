@@ -24,7 +24,7 @@
                 
                 @method('PUT')
                 
-                <input type="hidden" name="redirect_url" value="$redirectUrl">
+                <input type="hidden" name="redirect_url" :value="$redirectUrl">
             
                 <p class="text-gray-600">
                     @if ($problem === 'current_expired')

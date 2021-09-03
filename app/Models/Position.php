@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Casts\NullableBoolean;
+use App\Traits\HasPhone;
 use Illuminate\Support\Carbon;
 
 class Position extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use HasPhone;
     
     protected $casts = [
         'is_current' => NullableBoolean::class,

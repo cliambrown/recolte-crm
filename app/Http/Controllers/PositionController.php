@@ -101,10 +101,12 @@ class PositionController extends Controller
      */
     public function store(PositionPostRequest $request)
     {
+        $isCurrent = get_request_boolean($request->is_current);
+        
         $position = new Position;
         $position->person_id = $request->person_id;
         $position->org_id = $request->org_id;
-        $position->is_current = get_request_boolean($request->is_current);
+        $position->is_current = $isCurrent;
         $position->title = $request->title;
         $position->email = $request->email;
         $position->start_year = $request->start_year;
@@ -116,16 +118,15 @@ class PositionController extends Controller
         $position->notes = $request->notes;
         $position->save();
         
+        if ($isCurrent) {
+            Position::where('person_id', $request->person_id)
+                ->where('id', '!=', $position->id)
+                ->update(['is_current' => null]);
+        }
+        
         $redirectUrl = route('people.show', ['person' => $request->person_id]);
         $requestRedirectUrl = $request->redirect_url;
         if (is_this_domain($requestRedirectUrl)) $redirectUrl = $requestRedirectUrl;
-        
-        // // Prompt if is_current but end_date is past
-        // // or if not is_current but end_date is null
-        // if ($position->is_current) {
-        //     Position::where('person_id', $position->person_id)
-        //         ->update(['is_current' => null]);
-        // }
         
         return redirect($redirectUrl)
             ->with('status', __('Position created.'));
@@ -181,10 +182,12 @@ class PositionController extends Controller
      */
     public function update(PositionPostRequest $request, Position $position)
     {
+        $isCurrent = get_request_boolean($request->is_current);
+        
         $position->person_id = $request->person_id;
         $position->org_id = $request->org_id;
         $position->title = $request->title;
-        $position->is_current = get_request_boolean($request->is_current);
+        $position->is_current = $isCurrent;
         $position->email = $request->email;
         $position->start_year = $request->start_year;
         $position->start_month = $request->start_month;
@@ -194,6 +197,12 @@ class PositionController extends Controller
         $position->end_day = $request->end_day;
         $position->notes = $request->notes;
         $position->save();
+        
+        if ($isCurrent) {
+            Position::where('person_id', $request->person_id)
+                ->where('id', '!=', $position->id)
+                ->update(['is_current' => null]);
+        }
         
         $redirectUrl = route('people.show', ['person' => $request->person_id]);
         $requestRedirectUrl = $request->redirect_url;
@@ -231,23 +240,30 @@ class PositionController extends Controller
      * Update the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Position  $position
+     * @param  \App\Models\Person $person
      * @return \Illuminate\Http\Response
      */
-    public function update_current(Request $request, Position $position)
+    public function update_current(Request $request, Person $person)
     {
         $request->validate([
-            'is_current' => 'nullable|int',
+            'current_position_id' => 'nullable|int',
+            'redirect_url' => 'nullable|url',
         ]);
         
-        $isCurrent = get_request_boolean($request->is_current);
-        $position->is_current = $isCurrent;
-        if ($isCurrent) {
-            Position::where('person_id', $position->person_id)
-                    ->update(['is_current' => null]);
-        }
-        return redirect()->route('people.show', ['person' => $position->person_id])
-            ->with('status', __('Position updated.'));
+        $person->positions()
+            ->where('positions.id', '!=', $request->current_position_id)
+            ->update(['is_current' => null]);
+        
+        $person->positions()
+            ->where('positions.id', $request->current_position_id)
+            ->update(['is_current' => 1]);
+            
+        $redirectUrl = route('people.show', ['person' => $person->id]);
+        $requestRedirectUrl = $request->redirect_url;
+        if (is_this_domain($requestRedirectUrl)) $redirectUrl = $requestRedirectUrl;
+        
+        return redirect($redirectUrl)
+            ->with('status', __('Current position updated.'));
     }
 
     /**
