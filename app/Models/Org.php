@@ -56,7 +56,19 @@ class Org extends Model
         return $this->types->pluck('name')->toArray();
     }
     
-    public function people() {
-        return $this->belongsToMany(Person::class, 'positions')->using(Position::class);
+    public function positions() {
+        return $this->hasMany(Position::class)
+            ->orderByRaw('ISNULL(end_year) DESC')
+            ->orderBy('end_year', 'desc')
+            ->orderByRaw('ISNULL(end_month) DESC')
+            ->orderBy('end_month', 'desc')
+            ->orderByRaw('ISNULL(end_day) DESC')
+            ->orderBy('end_day', 'desc')
+            ->orderByRaw('ISNULL(start_year) DESC')
+            ->orderBy('start_year', 'desc')
+            ->orderByRaw('ISNULL(start_month) DESC')
+            ->orderBy('start_month', 'desc')
+            ->orderByRaw('ISNULL(start_day) DESC')
+            ->orderBy('start_day', 'desc');
     }
 }

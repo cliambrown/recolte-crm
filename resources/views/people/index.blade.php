@@ -51,49 +51,6 @@
                     </div>
                 </div>
                 
-                
-                
-                
-                
-                
-                
-                {{-- <div class="shadow bg-white p-4 rounded my-4">
-                    <div class="float-right ml-2 mb-2">
-                        <x-button href="{{ route('people.show', ['person' => $person->id]) }}" padding="tight" btncolor="blue" class="mr-2">
-                            {{ __('View') }}
-                        </x-button>
-                        <x-button href="{{ route('people.edit', ['person' => $person->id]) }}" padding="tight" btncolor="green">
-                            {{ __('Edit') }}
-                        </x-button>
-                    </div>
-                    <div class="font-bold text-gray-700">
-                        {{ $person->display_given_name }}
-                        {{ $person->display_family_name }}
-                    </div>
-                    <div class="text-sm text-gray-700 overflow-hidden mt-1">
-                        <div class="-mx-1">
-                            @if ($person->website)
-                                <a href="{{ $person->website }}" target="_blank" class="cursor-pointer mx-1">
-                                    <x-icons.link class="inline w-4 h-4 relative bottom-[1px] text-gray-400"></x-icons.link>
-                                    {{ get_domain($person->website) }}
-                                </a>
-                            @endif
-                            @if ($person->one_line_address)
-                                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($person->one_line_address) }}" target="_blank" class="cursor-pointer mx-1">
-                                    <x-icons.location-marker class="inline w-4 h-4 relative bottom-[1px] text-gray-400"></x-icons.location-marker>
-                                    {{ $person->one_line_address }}
-                                </a>
-                            @endif
-                            @if ($person->readable_phone)
-                                <a href="tel:{{ $person->readable_phone }}" class="cursor-pointer mx-1">
-                                    <x-icons.phone class="inline w-4 h-4 relative bottom-[1px] text-gray-400"></x-icons.phone>
-                                    {{ $person->readable_phone }}
-                                </a>
-                            @endif
-                        </div>
-                    </div>
-                </div> --}}
-                
             @endforeach
             
             {{ $people->links() }}

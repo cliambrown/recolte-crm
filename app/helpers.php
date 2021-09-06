@@ -39,7 +39,7 @@ function get_domain($str) {
  */
 function is_this_domain($str) {
     $domain = get_domain($str);
-    $thisDomain = env('APP_URL');
+    $thisDomain = get_domain(env('APP_URL'));
     return \Illuminate\Support\Str::startsWith($domain, $thisDomain);
 }
 

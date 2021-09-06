@@ -89,8 +89,7 @@ class PositionController extends Controller
             'problem' => $problem,
             'url' => $redirectUrl,
         ];
-        return redirect()->route('positions.confirm_current', $data)
-            ->with('status', __('Position updated.'));
+        return redirect()->route('positions.confirm_current', $data);
     }
 
     /**
@@ -127,6 +126,11 @@ class PositionController extends Controller
         $redirectUrl = route('people.show', ['person' => $request->person_id]);
         $requestRedirectUrl = $request->redirect_url;
         if (is_this_domain($requestRedirectUrl)) $redirectUrl = $requestRedirectUrl;
+        
+        $response = $this->doCheckCurrentPosition($position, $redirectUrl);
+        if ($response !== false) {
+            return $response->with('status', __('Position created.'));
+        }
         
         return redirect($redirectUrl)
             ->with('status', __('Position created.'));
@@ -210,7 +214,7 @@ class PositionController extends Controller
         
         $response = $this->doCheckCurrentPosition($position, $redirectUrl);
         if ($response !== false) {
-            return $response;
+            return $response->with('status', __('Position updated.'));
         }
         
         return redirect($redirectUrl)

@@ -71,7 +71,7 @@ window.suggestInput = function (data) {
                 this.filtered_option_ids = [];
                 this.options = {};
                 this.options_loading = true;
-                axios.post('/api/orgs/search', {
+                axios.post(this.options_url, {
                     search: input
                 }).then(response => {
                     let options = _.get(response, 'data');

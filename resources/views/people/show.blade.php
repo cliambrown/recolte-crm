@@ -47,7 +47,7 @@
                 @endif
                 
                 @if ($person->current_readable_phone)
-                    <x-phone class="my-2" :phone="$person->current_readable_phone"></x-phone>
+                    <x-phone class="mt-2" :phone="$person->current_readable_phone"></x-phone>
                 @endif
                 
             </div>
@@ -100,8 +100,8 @@
             
             @if ($person->notes)
                 <div class="flex">
-                    <div>
-                        <x-icons.document-text class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.document-text>
+                    <div class="mr-2">
+                        <x-icons.document-text class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.document-text>
                     </div>
                     <div class="ml-2 border-l-2 pl-2 border-purple-200">
                         {!! nl2br(e($person->notes)) !!}
@@ -110,22 +110,41 @@
             @endif
             
             <div>
-                <x-button href="{{ route('positions.create') }}?person={{ $person->id }}" padding="tight" class="mt-10">
+                <x-button href="{{ route('positions.create', ['person' => $person->id]) }}" padding="tight" class="mt-10">
                     <x-icons.plus></x-icons.plus> {{ __('Add Position') }}
                 </x-button>
             </div>
             
             @foreach ($person->positions as $position)
-                <div class="my-6">
-                    @if ($position->is_current)
-                        <div class="text-purple-500 font-semibold uppercase text-sm mb-1">
-                            {{ __('Current') }}
-                        </div>
-                    @endif
+                <div class="my-8">
+                    <div class="text-purple-600 text-sm mb-1">
+                        @if ($position->is_current)
+                            <span class="inline-block text-green-800 bg-green-100 px-2 py-1 -my-1 font-semibold uppercase mr-2 rounded text-xs">
+                                {{ __('Current') }}
+                            </span>
+                        @endif
+                        @if ($position->start_date_str)
+                            @if (!$position->end_date_str)
+                                <span class="text-gray-600 mr-1">{{ __('since') }}</span>
+                            @endif
+                            <span class="font-semibold mr-1">{{ $position->start_date_str }}</span>
+                        @endif
+                        @if ($position->end_date_str)
+                            @if ($position->start_date_str)
+                                <span class="text-gray-600 mr-1">{{ __('to') }}</span>
+                            @else
+                                <span class="text-gray-600 mr-1">{{ __('until') }}</span>
+                            @endif
+                            <span class="font-semibold">{{ $position->end_date_str }}</span>
+                        @endif
+                        @if (!$position->start_date_str && !$position->end_date_str)
+                            [{{ __('unknown dates') }}]
+                        @endif
+                    </div>
                     <div>
                         @if ($position->title)
-                            <span class="mr-2">{{ $position->title }}</span>
-                            <span class="text-gray-500 mr-2">{{ __('at') }}</span>
+                            <span class="mr-1">{{ $position->title }}</span>
+                            <span class="text-gray-600 mr-1">{{ __('at') }}</span>
                         @endif
                         <x-link href="{{ route('orgs.show', ['org' => $position->org->id]) }}">
                             {{ $position->org->name }}
@@ -134,18 +153,6 @@
                         <x-button href="{{ route('positions.edit', ['position' => $position->id]) }}" class="ml-4" padding="tight" btncolor="green">
                             {{ __('Edit') }}
                         </x-button>
-                    </div>
-                    <div class="text-gray-600 text-sm">
-                        @if ($position->start_date_str)
-                        @if (!$position->end_date_str)
-                            <span class="text-gray-500 mr-2">{{ __('since') }}</span>
-                        @endif
-                            <span class="font-semibold mr-2">{{ $position->start_date_str }}</span>
-                        @endif
-                        @if ($position->end_date_str)
-                            <span class="text-gray-500 mr-2">{{ __('until') }}</span>
-                            <span class="font-semibold mr-2">{{ $position->end_date_str }}</span>
-                        @endif
                     </div>
                     @if ($position->email)
                         <div class="mt-1">
@@ -160,8 +167,8 @@
                     @endif
                     @if ($position->notes)
                         <div class="flex mt-1">
-                            <div>
-                                <x-icons.document-text class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.document-text>
+                            <div class="mr-2">
+                                <x-icons.document-text class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.document-text>
                             </div>
                             <div class="ml-2 border-l-2 pl-2 border-purple-200">
                                 {!! nl2br(e($position->notes)) !!}
