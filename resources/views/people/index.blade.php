@@ -35,6 +35,17 @@
                     </div>
                     <div class="text-sm text-gray-700 overflow-hidden mt-1">
                         <div class="-mx-1">
+                            @if ($person->current_position)
+                                <span class="mx-1">
+                                    @if ($person->current_position->title)
+                                        <span class="text-gray-800">{{ $person->current_position->title }}</span>
+                                        <span class="text-gray-600">{{ __('at') }}</span>
+                                    @endif
+                                    <x-link href="{{ route('orgs.show', ['org' => $person->current_position->org->id]) }}">
+                                        {{ $person->current_position->org->name }}
+                                    </x-link>
+                                </span>
+                            @endif
                             @if ($person->current_email)
                                 <a href="mailto:{{ $person->current_email }}" class="cursor-pointer mx-1">
                                     <x-icons.at class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.at>

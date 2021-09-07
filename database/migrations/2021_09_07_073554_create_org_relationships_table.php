@@ -16,6 +16,7 @@ class CreateOrgRelationshipsTable extends Migration
         Schema::create('org_relationships', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

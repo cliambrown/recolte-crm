@@ -26,7 +26,7 @@ class Person extends Model
         $attributes = [
             'given_name',
             'family_name',
-            // 'org_names',
+            'contact_info_list',
         ];
         foreach ($attributes as $attr) {
             $value = remove_accents($this->$attr);
@@ -112,5 +112,38 @@ class Person extends Model
             return $this->getCurrentPosition()->readable_phone;
         }
         return $this->readable_phone;
+    }
+    
+    public function getContactInfoListAttribute() {
+        $info = [];
+        if ($this->email) {
+            $info[] = $this->email;
+        }
+        if ($this->readable_phone) {
+            $info[] = $this->spaced_phone;
+            $info[] = $this->compressed_phone;
+        }
+        if (!$this->relationLoaded('positions')) {
+            $this->load('positions.org');
+        }
+        $orgIDs = [];
+        foreach ($this->positions as $position) {
+            $org = $position->org;
+            $orgID = $org->id;
+            if (data_get($orgIDs, $orgID, false)) continue;
+            $orgIDs[$orgID] = true;
+            $info[] = $org->name;
+            if ($org->short_name) {
+                $info[] = $org->short_name;
+            }
+            if ($org->email) {
+                $info[] = $org->email;
+            }
+            if ($org->readable_phone) {
+                $info[] = $org->spaced_phone;
+                $info[] = $org->compressed_phone;
+            }
+        }
+        return implode(' ', $info);
     }
 }
