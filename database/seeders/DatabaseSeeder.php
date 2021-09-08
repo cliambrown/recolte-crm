@@ -20,6 +20,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+                
+        User::create([
+            'name' => 'Liam',
+            'email' => 'liam@recolte.ca',
+            'password' => Hash::make(env('LIAM_PASSWORD')),
+            'is_admin' => true,
+        ]);
         
         DB::table('org_types')->insert([
             ['name' => 'Entreprise'],
@@ -66,12 +73,5 @@ class DatabaseSeeder extends Seeder
         $position->start_day = 16;
         $position->is_current = true;
         $position->save();
-                
-        User::create([
-            'name' => 'Liam',
-            'email' => 'liam@recolte.ca',
-            'password' => Hash::make(env('LIAM_PASSWORD')),
-            'is_admin' => true,
-        ]);
     }
 }

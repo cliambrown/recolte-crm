@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasAddress;
+use App\Traits\HasLoggedUser;
 use App\Traits\HasPhone;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,8 +17,14 @@ class Person extends Model
     use Searchable;
     use HasPhone;
     use HasAddress;
+    use HasLoggedUser;
     
     protected $appends = ['full_name'];
+    
+    protected $fillable = [
+        'created_by_user_id',
+        'updated_by_user_id',
+    ];
     
     public function toSearchableArray()
     {

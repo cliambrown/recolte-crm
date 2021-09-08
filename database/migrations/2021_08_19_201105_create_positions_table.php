@@ -16,6 +16,8 @@ class CreatePositionsTable extends Migration
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->foreignId('created_by_user_id')->nullable();
+            $table->foreignId('updated_by_user_id')->nullable();
             $table->softDeletes();
             $table->foreignId('org_id');
             $table->foreignId('person_id');
