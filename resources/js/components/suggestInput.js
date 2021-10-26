@@ -20,6 +20,7 @@ window.suggestInput = function (data) {
         options_url: data.options_url,
         options_loading: false,
         fuse: null,
+        dispatch_event_name: data.dispatch_event_name,
         init() {
             this.parseOptions(data.options);
             if (!this.options_url) {
@@ -36,6 +37,23 @@ window.suggestInput = function (data) {
                     this.filterOptions(this.current_input, false);
                 }
             }
+            if (!!this.dispatch_event_name) {
+                this.dispatchEvent();
+                this.$watch('current_value', value => {
+                    this.dispatchEvent();
+                });
+            }
+        },
+        dispatchEvent() {
+            this.$nextTick(() => {
+                this.$el.dispatchEvent(new CustomEvent(this.dispatch_event_name, {
+                    bubbles: true,
+                    detail: {
+                        current_value: this.current_value,
+                        current_label: this.current_label,
+                    }
+                }));
+            });
         },
         parseOptions(options) {
             let optionsCount = options.length;

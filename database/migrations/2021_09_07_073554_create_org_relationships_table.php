@@ -21,7 +21,13 @@ class CreateOrgRelationshipsTable extends Migration
             $table->softDeletes();
             $table->foreignId('parent_org_id');
             $table->foreignId('child_org_id');
-            $table->string('description')->nullable();
+            $table->string('child_description')->nullable();
+            $table->unsignedSmallInteger('start_year')->nullable();
+            $table->unsignedTinyInteger('start_month')->nullable();
+            $table->unsignedTinyInteger('start_day')->nullable();
+            $table->unsignedSmallInteger('end_year')->nullable();
+            $table->unsignedTinyInteger('end_month')->nullable();
+            $table->unsignedTinyInteger('end_day')->nullable();
             $table->string('notes', 1000)->nullable();
         });
     }

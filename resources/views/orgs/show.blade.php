@@ -86,6 +86,15 @@
             @endif
             
             <div>
+                <x-button href="{{ route('org_relationships.create', ['child' => $org->id]) }}" padding="tight" class="mt-10">
+                    <x-icons.plus></x-icons.plus> {{ __('Add Parent Org') }}
+                </x-button>
+                <x-button href="{{ route('org_relationships.create', ['parent' => $org->id]) }}" padding="tight" class="ml-4 mt-10">
+                    <x-icons.plus></x-icons.plus> {{ __('Add Child Org') }}
+                </x-button>
+            </div>
+            
+            <div>
                 <x-button href="{{ route('positions.create', ['org' => $org->id]) }}" padding="tight" class="mt-10">
                     <x-icons.plus></x-icons.plus> {{ __('Add Person') }}
                 </x-button>

@@ -8,6 +8,7 @@
     'id',
     'asSelect' => false,
     'placeholderText' => __('Select...'),
+    'dispatchEventName' => null,
 ])
 
 @php
@@ -26,6 +27,7 @@
         'options_url' => $optionsUrl,
         'value_attr' => $valueAttr,
         'label_attr' => $labelAttr,
+        'dispatch_event_name' => $dispatchEventName,
     ];
 @endphp
 

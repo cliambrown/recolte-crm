@@ -3,6 +3,7 @@
 use App\Http\Controllers\OrgController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\OrgRelationshipController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('people', PersonController::class)->except(['index']);
     
     Route::resource('orgs', OrgController::class);
+    Route::resource('org_relationships', OrgRelationshipController::class)->except(['index','show']);
     
     Route::resource('positions', PositionController::class)->except(['index','show']);
     Route::get('/people/{person}/confirm-current-position', [PositionController::class, 'confirm_current'])->name('positions.confirm_current');

@@ -35,14 +35,14 @@ class PositionController extends Controller
         
         $org = null;
         $orgID = data_get($_GET, 'org');
-        if ($orgID) {
+        if (!!$orgID) {
             $org = Org::find($orgID);
             if ($org) $redirectUrl = route('orgs.show', ['org' => $org->id]);
         }
 
         $person = null;
         $personID = data_get($_GET, 'person');
-        if ($personID) {
+        if (!!$personID) {
             $person = Person::find($personID);
             if ($person) $redirectUrl = route('people.show', ['person' => $person->id]);
         }
@@ -160,9 +160,9 @@ class PositionController extends Controller
         $redirectUrl = null;
         $orgID = data_get($_GET, 'org');
         $personID = data_get($_GET, 'person');
-        if ($orgID && $orgID === $position->org_id) {
+        if (!!$orgID && $orgID === $position->org_id) {
             $redirectUrl = route('orgs.show', ['org' => $orgID]);
-        } elseif ($personID && $personID === $position->person_id) {
+        } elseif (!!$personID && $personID === $position->person_id) {
             $redirectUrl = route('people.show', ['person' => $personID]);
         }
         
