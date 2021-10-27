@@ -94,6 +94,76 @@
                 </x-button>
             </div>
             
+            @if ($org->child_relationships->count())
+                <h3 class="mt-8 my-4 text-lg text-gray-700">{{ __('Parent Orgs') }}</h3>
+            @endif
+            
+            @foreach ($org->child_relationships as $relationship)
+                <div class="my-4">
+                    <div class="text-purple-600 text-sm mb-1">
+                        @if ($relationship->start_date_str)
+                            @if (!$relationship->end_date_str)
+                                <span class="text-gray-500 mr-1">{{ __('since') }}</span>
+                            @endif
+                            <span class="font-semibold mr-1">{{ $relationship->start_date_str }}</span>
+                        @endif
+                        @if ($relationship->end_date_str)
+                            @if ($relationship->start_date_str)
+                                <span class="text-gray-500 mr-1">{{ __('to') }}</span>
+                            @else
+                                <span class="text-gray-500 mr-1">{{ __('until') }}</span>
+                            @endif
+                            <span class="font-semibold">{{ $relationship->end_date_str }}</span>
+                        @endif
+                        @if (!$relationship->start_date_str && !$relationship->end_date_str)
+                            [{{ __('unknown dates') }}]
+                        @endif
+                    </div>
+                    <span class="font-semibold">
+                        {{ $relationship->child_description }}
+                    </span>
+                    {{ __('of') }}
+                    <x-link href="{{ route('orgs.show', ['org' => $relationship->parent_org->id]) }}">
+                        {{ $relationship->parent_org->name }}
+                    </x-link>
+                </div>
+            @endforeach
+            
+            @if ($org->parent_relationships->count())
+                <h3 class="mt-8 my-4 text-lg text-gray-700">{{ __('Child Orgs') }}</h3>
+            @endif
+            
+            @foreach ($org->parent_relationships as $relationship)
+                <div class="my-4">
+                    <div class="text-purple-600 text-sm mb-1">
+                        @if ($relationship->start_date_str)
+                            @if (!$relationship->end_date_str)
+                                <span class="text-gray-500 mr-1">{{ __('since') }}</span>
+                            @endif
+                            <span class="font-semibold mr-1">{{ $relationship->start_date_str }}</span>
+                        @endif
+                        @if ($relationship->end_date_str)
+                            @if ($relationship->start_date_str)
+                                <span class="text-gray-500 mr-1">{{ __('to') }}</span>
+                            @else
+                                <span class="text-gray-500 mr-1">{{ __('until') }}</span>
+                            @endif
+                            <span class="font-semibold">{{ $relationship->end_date_str }}</span>
+                        @endif
+                        @if (!$relationship->start_date_str && !$relationship->end_date_str)
+                            [{{ __('unknown dates') }}]
+                        @endif
+                    </div>
+                    <x-link href="{{ route('orgs.show', ['org' => $relationship->child_org->id]) }}">
+                        {{ $relationship->child_org->name }}
+                    </x-link>
+                    {{ __('is a') }}
+                    <span class="font-semibold">
+                        {{ $relationship->child_description }}
+                    </span>
+                </div>
+            @endforeach
+            
             <div>
                 <x-button href="{{ route('positions.create', ['org' => $org->id]) }}" padding="tight" class="mt-10">
                     <x-icons.plus></x-icons.plus> {{ __('Add Person') }}

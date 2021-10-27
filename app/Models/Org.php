@@ -78,4 +78,36 @@ class Org extends Model
             ->orderByRaw('ISNULL(start_day) DESC')
             ->orderBy('start_day', 'desc');
     }
+    
+    public function parent_relationships() {
+        return $this->hasMany(OrgRelationship::class, 'parent_org_id')
+            ->orderByRaw('ISNULL(end_year) DESC')
+            ->orderBy('end_year', 'desc')
+            ->orderByRaw('ISNULL(end_month) DESC')
+            ->orderBy('end_month', 'desc')
+            ->orderByRaw('ISNULL(end_day) DESC')
+            ->orderBy('end_day', 'desc')
+            ->orderByRaw('ISNULL(start_year) DESC')
+            ->orderBy('start_year', 'desc')
+            ->orderByRaw('ISNULL(start_month) DESC')
+            ->orderBy('start_month', 'desc')
+            ->orderByRaw('ISNULL(start_day) DESC')
+            ->orderBy('start_day', 'desc');
+    }
+    
+    public function child_relationships() {
+        return $this->hasMany(OrgRelationship::class, 'child_org_id')
+            ->orderByRaw('ISNULL(end_year) DESC')
+            ->orderBy('end_year', 'desc')
+            ->orderByRaw('ISNULL(end_month) DESC')
+            ->orderBy('end_month', 'desc')
+            ->orderByRaw('ISNULL(end_day) DESC')
+            ->orderBy('end_day', 'desc')
+            ->orderByRaw('ISNULL(start_year) DESC')
+            ->orderBy('start_year', 'desc')
+            ->orderByRaw('ISNULL(start_month) DESC')
+            ->orderBy('start_month', 'desc')
+            ->orderByRaw('ISNULL(start_day) DESC')
+            ->orderBy('start_day', 'desc');
+    }
 }

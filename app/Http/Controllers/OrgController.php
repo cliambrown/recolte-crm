@@ -118,7 +118,12 @@ class OrgController extends Controller
      */
     public function show(Org $org)
     {
-        $org->load('types','positions.person');
+        $org->load(
+            'types',
+            'positions.person',
+            'parent_relationships.child_org',
+            'child_relationships.parent_org',
+        );
         return view('orgs.show')->with(['org' => $org]);
     }
 

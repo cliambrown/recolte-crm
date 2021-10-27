@@ -20,11 +20,11 @@ class OrgRelationship extends Model
         'updated_by_user_id',
     ];
     
-    public function parentOrg() {
+    public function parent_org() {
         return $this->belongsTo(Org::class);
     }
     
-    public function childOrg() {
+    public function child_org() {
         return $this->belongsTo(Org::class);
     }
 }
