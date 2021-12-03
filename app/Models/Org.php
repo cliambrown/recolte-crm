@@ -21,11 +21,6 @@ class Org extends Model
     
     protected $appends = ['name_with_short_name'];
     
-    protected $fillable = [
-        'created_by_user_id',
-        'updated_by_user_id',
-    ];
-    
     public function toSearchableArray()
     {
         $array = [];
@@ -34,7 +29,6 @@ class Org extends Model
             'name',
             'short_name',
             'website',
-            // 'org_names',
         ];
         foreach ($attributes as $attr) {
             $value = remove_accents($this->$attr);
@@ -43,7 +37,15 @@ class Org extends Model
         return $array;
     }
     
-    // Returns "name (short_name)", mostly for searching
+    protected static function booted() {
+        static::deleting(function ($org) {
+            $org->positions()->delete();
+            $org->parent_relationships()->delete();
+            $org->child_relationships()->delete();
+        });
+    }
+    
+    // Returns "name (short_name)"
     public function getNameWithShortNameAttribute() {
         $fullName = $this->name;
         if ($this->short_name) {

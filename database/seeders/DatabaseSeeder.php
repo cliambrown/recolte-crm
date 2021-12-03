@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Org;
 use App\Models\Person;
 use App\Models\Position;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -39,8 +40,8 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Ferme'],
         ]);
         
-        Person::factory(10)->create();
-        Org::factory(10)->create();
+        Person::factory(50)->create();
+        Org::factory(50)->create();
         
         $testOrg1 = Org::factory()->make();
         $testOrg1->name = 'Test Org 1';
@@ -73,5 +74,7 @@ class DatabaseSeeder extends Seeder
         $position->start_day = 16;
         $position->is_current = true;
         $position->save();
+        
+        Project::factory(50)->create();
     }
 }

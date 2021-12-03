@@ -15,11 +15,6 @@ class OrgRelationship extends Model
     use HasLoggedUser;
     use HasStartEndDate;
     
-    protected $fillable = [
-        'created_by_user_id',
-        'updated_by_user_id',
-    ];
-    
     public function parent_org() {
         return $this->belongsTo(Org::class);
     }

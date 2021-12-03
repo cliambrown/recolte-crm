@@ -1,5 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
+        
+        @if ($isEdit)
+            @php
+                $confirmMsg = __('Are you sure you want to remove the relationship between :parentOrgName and :childOrgName?', ['parentOrgName' => $parentOrg->name, 'childOrgName' => $childOrg->name])
+            @endphp
+            <x-delete-form
+                action="{{ route('org_relationships.destroy', ['org_relationship' => $relationship->id]) }}"
+                class="float-right"
+                :confirm-msg="$confirmMsg"
+                >
+                <input type="hidden" name="redirect_url" value="{{ $redirectUrl }}">
+            </x-delete-form>
+        @endif
+        
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             @if ($isEdit)
                 {{ __('Edit') }}
@@ -8,6 +22,7 @@
             @endif
             {{ __('Org Relationship') }}
         </h2>
+        
     </x-slot>
 
     <div class="py-6">

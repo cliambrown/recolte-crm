@@ -21,11 +21,6 @@ class Person extends Model
     
     protected $appends = ['full_name'];
     
-    protected $fillable = [
-        'created_by_user_id',
-        'updated_by_user_id',
-    ];
-    
     public function toSearchableArray()
     {
         $array = [];
@@ -40,6 +35,13 @@ class Person extends Model
             $array[$attr] = $value;
         }
         return $array;
+    }
+    
+    protected static function booted() {
+        static::deleting(function ($person) {
+            $person->positions()->delete();
+            $person->project_people()->delete();
+        });
     }
     
     public function created_by_user() {
@@ -121,6 +123,13 @@ class Person extends Model
         return $this->readable_phone;
     }
     
+    public function getCurrentOneLineAddressAttribute() {
+        if (optional($this->getCurrentPosition())->one_line_address) {
+            return $this->getCurrentPosition()->one_line_address;
+        }
+        return $this->one_line_address;
+    }
+    
     public function getContactInfoListAttribute() {
         $info = [];
         if ($this->email) {
@@ -152,5 +161,21 @@ class Person extends Model
             }
         }
         return implode(' ', $info);
+    }
+    
+    public function project_people() {
+        return $this->hasMany(ProjectPerson::class)
+            ->orderByRaw('ISNULL(end_year) DESC')
+            ->orderBy('end_year', 'desc')
+            ->orderByRaw('ISNULL(end_month) DESC')
+            ->orderBy('end_month', 'desc')
+            ->orderByRaw('ISNULL(end_day) DESC')
+            ->orderBy('end_day', 'desc')
+            ->orderByRaw('ISNULL(start_year) DESC')
+            ->orderBy('start_year', 'desc')
+            ->orderByRaw('ISNULL(start_month) DESC')
+            ->orderBy('start_month', 'desc')
+            ->orderByRaw('ISNULL(start_day) DESC')
+            ->orderBy('start_day', 'desc');
     }
 }

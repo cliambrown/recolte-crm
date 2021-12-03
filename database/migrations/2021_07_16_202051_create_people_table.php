@@ -21,6 +21,7 @@ class CreatePeopleTable extends Migration
             $table->softDeletes();
             $table->string('given_name')->nullable();
             $table->string('family_name')->nullable();
+            $table->string('pronouns')->nullable();
             $table->string('street_address')->nullable();
             $table->string('street_address_2')->nullable();
             $table->string('city')->nullable();

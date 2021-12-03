@@ -1,5 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
+        
+        @if ($isEdit)
+            <x-delete-form
+                action="{{ route('people.destroy', ['person' => $person->id]) }}"
+                class="float-right"
+                confirm-msg="{{ __('Are you sure you want to delete :personName?', ['personName' => $person->full_name]) }}"
+                >
+            </x-delete-form>
+        @endif
+        
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             @if ($isEdit)
                 {{ __('Edit') }}
@@ -8,6 +18,7 @@
             @endif
             {{ __('Person') }}
         </h2>
+        
     </x-slot>
 
     <div class="py-6">
@@ -119,6 +130,15 @@
                     <div class="mb-8 max-w-xs">
                         <x-label for="postal_code" :value="__('Postal Code')" />
                         <x-input id="postal_code" class="block mt-1 w-full" type="text" name="postal_code" :value="old('postal_code', $person->postal_code)" />
+                    </div>
+                    
+                </div>
+                
+                <div class="md:grid md:gap-4 md:grid-cols-4">
+                
+                    <div class="mb-8 max-w-xs">
+                        <x-label for="pronouns" :value="__('Pronouns')" />
+                        <x-input id="pronouns" class="block mt-1 w-full" type="text" name="pronouns" :value="old('pronouns', $person->pronouns)" />
                     </div>
                     
                 </div>

@@ -31,14 +31,14 @@ class OrgRelationshipController extends Controller
         $redirectUrl = null;
         
         $parentOrg = null;
-        $parentOrgID = data_get($_GET, 'parent');
+        $parentOrgID = intval(data_get($_GET, 'parent'));
         if (!!$parentOrgID) {
             $parentOrg = Org::find($parentOrgID);
             if ($parentOrg) $redirectUrl = route('orgs.show', ['org' => $parentOrg->id]);
         }
         
         $childOrg = null;
-        $childOrgID = data_get($_GET, 'child');
+        $childOrgID = intval(data_get($_GET, 'child'));
         if (!!$childOrgID) {
             $childOrg = Org::find($childOrgID);
             if ($childOrg) $redirectUrl = route('orgs.show', ['org' => $childOrg->id]);
@@ -104,23 +104,23 @@ class OrgRelationshipController extends Controller
     public function edit(OrgRelationship $orgRelationship)
     {
         $redirectUrl = null;
-        $parentOrgID = data_get($_GET, 'parent');
-        $childOrgID = data_get($_GET, 'child');
-        if (!!$parentOrgID && $parentOrgID === $orgRelationship->org_id) {
+        $parentOrgID = intval(data_get($_GET, 'parent'));
+        $childOrgID = intval(data_get($_GET, 'child'));
+        if (!!$parentOrgID && $parentOrgID === $orgRelationship->parent_org_id) {
             $redirectUrl = route('orgs.show', ['org' => $parentOrgID]);
-        } elseif (!!$childOrgID && $childOrgID === $orgRelationship->person_id) {
+        } elseif (!!$childOrgID && $childOrgID === $orgRelationship->child_org_id) {
             $redirectUrl = route('orgs.show', ['org' => $childOrgID]);
         }
         
         $data = [
             'isEdit' => true,
-            'position' => $orgRelationship,
+            'relationship' => $orgRelationship,
             'parentOrg' => $orgRelationship->parent_org,
             'childOrg' => $orgRelationship->child_org,
             'redirectUrl' => $redirectUrl,
         ];
 
-        return view('positions.create-edit')->with($data);
+        return view('org_relationships.create-edit')->with($data);
     }
 
     /**
@@ -130,9 +130,24 @@ class OrgRelationshipController extends Controller
      * @param  \App\Models\OrgRelationship  $orgRelationship
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrgRelationship $orgRelationship)
+    public function update(OrgRelationshipPostRequest $request, OrgRelationship $orgRelationship)
     {
-        //
+        $orgRelationship->child_description = $request->child_description;
+        $orgRelationship->start_year = $request->start_year;
+        $orgRelationship->start_month = $request->start_month;
+        $orgRelationship->start_day = $request->start_day;
+        $orgRelationship->end_year = $request->end_year;
+        $orgRelationship->end_month = $request->end_month;
+        $orgRelationship->end_day = $request->end_day;
+        $orgRelationship->notes = $request->notes;
+        $orgRelationship->save();
+        
+        $redirectUrl = route('orgs.show', ['org' => $orgRelationship->parent_org_id]);
+        $requestRedirectUrl = $request->redirect_url;
+        if (is_this_domain($requestRedirectUrl)) $redirectUrl = $requestRedirectUrl;
+        
+        return redirect($redirectUrl)
+            ->with('status', __('Position updated.'));
     }
 
     /**
@@ -143,6 +158,14 @@ class OrgRelationshipController extends Controller
      */
     public function destroy(OrgRelationship $orgRelationship)
     {
-        //
+        $parentOrgId = $orgRelationship->parent_org_id;
+        $orgRelationship->delete();
+        
+        $redirectUrl = route('orgs.show', ['org' => $parentOrgId]);
+        $requestRedirectUrl = data_get($_POST, 'redirect_url', '');
+        if (is_this_domain($requestRedirectUrl)) $redirectUrl = $requestRedirectUrl;
+        
+        return redirect($redirectUrl)
+            ->with('status', __('Org relationship removed.'));
     }
 }

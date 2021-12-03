@@ -6,3 +6,11 @@ body, body * {
     font-variant-ligatures: no-contextual;
 }
 [x-cloak] { display: none !important; }
+
+.no-br br {
+    display: none;
+}
+
+button:disabled, [role="button"]:disabled {
+    @apply cursor-default;
+}

@@ -34,14 +34,14 @@ class PositionController extends Controller
         $redirectUrl = null;
         
         $org = null;
-        $orgID = data_get($_GET, 'org');
+        $orgID = intval(data_get($_GET, 'org'));
         if (!!$orgID) {
             $org = Org::find($orgID);
             if ($org) $redirectUrl = route('orgs.show', ['org' => $org->id]);
         }
 
         $person = null;
-        $personID = data_get($_GET, 'person');
+        $personID = intval(data_get($_GET, 'person'));
         if (!!$personID) {
             $person = Person::find($personID);
             if ($person) $redirectUrl = route('people.show', ['person' => $person->id]);
@@ -158,8 +158,8 @@ class PositionController extends Controller
         $position->is_current = get_request_boolean(old('is_current', $position->is_current));
         
         $redirectUrl = null;
-        $orgID = data_get($_GET, 'org');
-        $personID = data_get($_GET, 'person');
+        $orgID = intval(data_get($_GET, 'org'));
+        $personID = intval(data_get($_GET, 'person'));
         if (!!$orgID && $orgID === $position->org_id) {
             $redirectUrl = route('orgs.show', ['org' => $orgID]);
         } elseif (!!$personID && $personID === $position->person_id) {
@@ -278,6 +278,14 @@ class PositionController extends Controller
      */
     public function destroy(Position $position)
     {
-        //
+        $person = $position->person;
+        $position->delete();
+        
+        $redirectUrl = route('people.show', ['person' => $person->id]);
+        $requestRedirectUrl = data_get($_POST, 'redirect_url', '');
+        if (is_this_domain($requestRedirectUrl)) $redirectUrl = $requestRedirectUrl;
+        
+        return redirect($redirectUrl)
+            ->with('status', __('Position removed.'));
     }
 }

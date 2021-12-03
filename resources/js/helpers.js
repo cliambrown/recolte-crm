@@ -23,8 +23,11 @@ window.getAlpineObj = function (obj) {
 }
 
 window.copyToClipboard = function (text) {
-    console.log(text);
     navigator.clipboard.writeText(text);
+}
+
+window.hasOverflowed = function (el) {
+    return (el.offsetWidth < el.scrollWidth);
 }
 
 window.getReadableAxiosError = function (error) {

@@ -23,8 +23,6 @@ class Position extends Model
     ];
     
     protected $fillable = [
-        'created_by_user_id',
-        'updated_by_user_id',
         'is_current',
     ];
     

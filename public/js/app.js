@@ -2954,7 +2954,7 @@ module.exports = function transformData(data, headers, fns) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-/* provided dependency */ var process = __webpack_require__(/*! process/browser */ "./node_modules/process/browser.js");
+/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 
 
 var utils = __webpack_require__(/*! ./utils */ "./node_modules/axios/lib/utils.js");
@@ -4032,6 +4032,10 @@ __webpack_require__(/*! ./helpers.js */ "./resources/js/helpers.js");
 
 __webpack_require__(/*! ./components/suggestInput.js */ "./resources/js/components/suggestInput.js");
 
+__webpack_require__(/*! ./components/expandableNotes.js */ "./resources/js/components/expandableNotes.js");
+
+__webpack_require__(/*! ./components/deleteForm.js */ "./resources/js/components/deleteForm.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -4062,6 +4066,55 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/components/deleteForm.js":
+/*!***********************************************!*\
+  !*** ./resources/js/components/deleteForm.js ***!
+  \***********************************************/
+/***/ (() => {
+
+window.deleteForm = function (data) {
+  return {
+    confirm_msg: data.confirm_msg,
+    onSubmit: function onSubmit() {
+      if (window.confirm(this.confirm_msg)) {
+        this.$refs.form.submit();
+      }
+    }
+  };
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/expandableNotes.js":
+/*!****************************************************!*\
+  !*** ./resources/js/components/expandableNotes.js ***!
+  \****************************************************/
+/***/ (() => {
+
+window.expandableNotes = function () {
+  return {
+    expand: false,
+    hasOverflowed: false,
+    init: function init() {
+      var _this = this;
+
+      this.$nextTick(function () {
+        _this.updateHasOverflowed();
+      });
+      window.addEventListener('resize', function (e) {
+        window.setTimeout(function () {
+          _this.updateHasOverflowed();
+        }, 10);
+      });
+    },
+    updateHasOverflowed: function updateHasOverflowed() {
+      this.hasOverflowed = hasOverflowed(this.$refs.notes);
+    }
+  };
+};
 
 /***/ }),
 
@@ -4359,8 +4412,11 @@ window.getAlpineObj = function (obj) {
 };
 
 window.copyToClipboard = function (text) {
-  console.log(text);
   navigator.clipboard.writeText(text);
+};
+
+window.hasOverflowed = function (el) {
+  return el.offsetWidth < el.scrollWidth;
 };
 
 window.getReadableAxiosError = function (error) {

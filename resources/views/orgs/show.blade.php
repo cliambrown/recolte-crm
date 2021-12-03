@@ -16,45 +16,63 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
+            <!-- Session Status -->
+            <x-auth-session-status class="mb-4" :status="session('status')" />
+            
+            <!-- Validation Errors -->
+            <x-auth-validation-errors class="mb-4" :errors="$errors" />
+            
             <div class="mb-4">
                 <x-button href="{{ route('orgs.edit', ['org' => $org->id]) }}" btncolor="blue" padding="tight" class="">
-                    Edit Info
+                    {{ __('Edit') }} {{ __('Info') }}
                 </x-button>
             </div>
             
             @if ($org->website)
-                <div class="my-2">
-                    <x-icons.globe class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.globe>
-                    <x-link href="{{ $org->website }}" target="_blank">
-                        {{ $org->website }}
-                    </x-link>
+                <div class="my-2 flex">
+                    <div class="mr-2">
+                        <x-icons.globe class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.globe>
+                    </div>
+                    <div>
+                        <x-link href="{{ $org->website }}" target="_blank">
+                            {{ $org->website }}
+                        </x-link>
+                    </div>
                 </div>
             @endif
             
             @if ($org->one_line_address)
-                <div class="my-2" x-data="{ show: false }">
-                    <x-icons.location-marker class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.location-marker>
-                    {{ $org->one_line_address }}
-                    <x-link href="https://www.google.com/maps/search/?api=1&query={{ urlencode($org->one_line_address) }}" target="_blank" class="ml-2">
-                        Maps
-                    </x-link>
-                    <div class="inline-block relative ml-2">
-                        <x-link role="button" href="javascript:void(0)" x-on:click="copyToClipboard('{!! htmlspecialchars($org->one_line_address, ENT_QUOTES) !!}');show=true;setTimeout(() => show = false, 2000)">
-                            Copy
+                <div class="my-2 flex" x-data="{ show: false }">
+                    <div class="mr-2">
+                        <x-icons.location-marker class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.location-marker>
+                    </div>
+                    <div>
+                        {{ $org->one_line_address }}
+                        <x-link href="https://www.google.com/maps/search/?api=1&query={{ urlencode($org->one_line_address) }}" target="_blank" class="ml-2">
+                            Maps
                         </x-link>
-                        <div x-show="show" x-cloak class="absolute z-10 left-1/2 -translate-x-1/2 bottom-full text-purple-500 bg-white p-1 shadow-md rounded whitespace-nowrap">
-                            Copied
+                        <div class="inline-block relative ml-2">
+                            <x-link role="button" href="javascript:void(0)" x-on:click="copyToClipboard('{!! htmlspecialchars($org->one_line_address, ENT_QUOTES) !!}');show=true;setTimeout(() => show = false, 2000)">
+                                Copy
+                            </x-link>
+                            <div x-show="show" x-cloak class="absolute z-10 left-1/2 -translate-x-1/2 bottom-full text-purple-500 bg-white p-1 shadow-md rounded whitespace-nowrap">
+                                Copied
+                            </div>
                         </div>
                     </div>
                 </div>
             @endif
             
             @if ($org->email)
-                <div class="my-2">
-                    <x-icons.at class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.at>
-                    <x-link href="mailto:{{ $org->email }}" target="_blank">
-                        {{ $org->email }}
-                    </x-link>
+                <div class="my-2 flex">
+                    <div class="mr-2">
+                        <x-icons.at class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.at>
+                    </div>
+                    <div>
+                        <x-link href="mailto:{{ $org->email }}" target="_blank">
+                            {{ $org->email }}
+                        </x-link>
+                    </div>
                 </div>
             @endif
             
@@ -63,14 +81,7 @@
             @endif
             
             @if ($org->notes)
-                <div class="flex">
-                    <div class="mr-2">
-                        <x-icons.document-text class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.document-text>
-                    </div>
-                    <div class="ml-2 border-l-2 pl-2 border-purple-200">
-                        {!! nl2br(e($org->notes)) !!}
-                    </div>
-                </div>
+                <x-expandable-notes :notes="$org->notes"></x-expandable-notes>
             @endif
             
             @if ($org->types->count())
@@ -126,7 +137,13 @@
                     <x-link href="{{ route('orgs.show', ['org' => $relationship->parent_org->id]) }}">
                         {{ $relationship->parent_org->name }}
                     </x-link>
+                    <x-button href="{{ route('org_relationships.edit', ['org_relationship' => $relationship->id, 'child' => $org->id]) }}" class="ml-4" padding="tight" btncolor="green">
+                        {{ __('Edit') }}
+                    </x-button>
                 </div>
+                @if ($relationship->notes)
+                    <x-expandable-notes :notes="$relationship->notes"></x-expandable-notes>
+                @endif
             @endforeach
             
             @if ($org->parent_relationships->count())
@@ -154,13 +171,21 @@
                             [{{ __('unknown dates') }}]
                         @endif
                     </div>
-                    <x-link href="{{ route('orgs.show', ['org' => $relationship->child_org->id]) }}">
-                        {{ $relationship->child_org->name }}
-                    </x-link>
-                    {{ __('is a') }}
-                    <span class="font-semibold">
-                        {{ $relationship->child_description }}
-                    </span>
+                    <div class="mb-1">
+                        <x-link href="{{ route('orgs.show', ['org' => $relationship->child_org->id]) }}">
+                            {{ $relationship->child_org->name }}
+                        </x-link>
+                        {{ __('is a') }}
+                        <span class="font-semibold">
+                            {{ $relationship->child_description }}
+                        </span>
+                        <x-button href="{{ route('org_relationships.edit', ['org_relationship' => $relationship->id, 'parent' => $org->id]) }}" class="ml-4" padding="tight" btncolor="green">
+                            {{ __('Edit') }}
+                        </x-button>
+                    </div>
+                    @if ($relationship->notes)
+                        <x-expandable-notes :notes="$relationship->notes"></x-expandable-notes>
+                    @endif
                 </div>
             @endforeach
             
@@ -199,7 +224,7 @@
                             <span class="text-gray-600 mx-1">—</span>
                             <span class="mr-1">{{ $position->title }}</span>
                         @endif
-                        <x-button href="{{ route('positions.edit', ['position' => $position->id]) }}" class="ml-4" padding="tight" btncolor="green">
+                        <x-button href="{{ route('positions.edit', ['position' => $position->id, 'org' => $org->id]) }}" class="ml-4" padding="tight" btncolor="green">
                             {{ __('Edit') }}
                         </x-button>
                     </div>
@@ -215,14 +240,7 @@
                         <x-phone class="mt-1" :phone="$position->readable_phone"></x-phone>
                     @endif
                     @if ($position->notes)
-                        <div class="flex mt-1">
-                            <div class="mr-2">
-                                <x-icons.document-text class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.document-text>
-                            </div>
-                            <div class="ml-2 border-l-2 pl-2 border-purple-200">
-                                {!! nl2br(e($position->notes)) !!}
-                            </div>
-                        </div>
+                        <x-expandable-notes :notes="$position->notes"></x-expandable-notes>
                     @endif
                 </div>
             @endforeach

@@ -1,5 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
+        
+        @if ($isEdit)
+            @php
+                $confirmMsg = __('Are you sure you want to delete ":orgName"?', ['orgName' => $org->name])
+            @endphp
+            <x-delete-form
+                action="{{ route('orgs.destroy', ['org' => $org->id]) }}"
+                class="float-right"
+                :confirm-msg="$confirmMsg"
+                >
+            </x-delete-form>
+        @endif
+        
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             @if ($isEdit)
                 {{ __('Edit') }}
@@ -11,6 +24,7 @@
                 : {{ $org->name }}
             @endif
         </h2>
+        
     </x-slot>
 
     <div class="py-6">

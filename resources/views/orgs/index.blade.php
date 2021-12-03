@@ -4,19 +4,36 @@
             {{ __('Orgs') }}
         </h2>
     </x-slot>
-    
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-    
-    <!-- Validation Errors -->
-    <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <x-button href="{{ route('orgs.create') }}">
-                <x-icons.plus></x-icons.plus> {{ __('Add') }} {{ __('Org') }}
-            </x-button>
+            <!-- Session Status -->
+            <x-auth-session-status class="mb-4" :status="session('status')" />
+            
+            <!-- Validation Errors -->
+            <x-auth-validation-errors class="mb-4" :errors="$errors" />
+            
+            <div class="sm:flex sm:justify-between">
+                
+                <div>
+                    <x-button href="{{ route('orgs.create') }}">
+                        <x-icons.plus></x-icons.plus> {{ __('Add') }} {{ __('Org') }}
+                    </x-button>
+                </div>
+                
+                <form class="w-full sm:w-auto sm:max-w-xs flex-grow sm:flex my-3 sm:my-0" method="GET">
+                    <div class="flex-grow">
+                        <x-input type="text" placeholder="{{ __('Search') }}" name="q" aria-placeholder="{{ __('Search') }}" class="w-full flex-grow" value="{{ $q }}"></x-input>
+                    </div>
+                    <div class="ml-1">
+                        <x-button type="submit">
+                            <x-icons.search class="-my-1"></x-icons.search>
+                        </x-button>
+                    </div>
+                </form>
+                
+            </div>
             
             @foreach ($orgs as $org)
                 

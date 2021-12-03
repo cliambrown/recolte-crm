@@ -16,9 +16,23 @@ class OrgController extends Controller
      */
     public function index()
     {
-        $orgs = Org::orderBy('name')
-            ->paginate('20');
-        return view('orgs.index')->with(['orgs' => $orgs]);
+        $q = trim(data_get($_GET, 'q', ''));
+        
+        if ($q) {
+            $orgs = Org::search($q)
+                ->orderBy('name')
+                ->paginate('20');
+        } else {
+            $orgs = Org::orderBy('name')
+                ->paginate('20');
+        }
+        
+        $data = [
+            'orgs' => $orgs,
+            'q' => $q,
+        ];
+        
+        return view('orgs.index')->with($data);
     }
 
     /**
@@ -29,7 +43,7 @@ class OrgController extends Controller
     public function create()
     {
         $org = new Org;
-        // $org->city = 'Montréal';
+        $org->city = 'Montréal';
         $org->province = 'Québec';
         $org->country = 'Canada';
         
@@ -219,7 +233,10 @@ class OrgController extends Controller
      */
     public function destroy(Org $org)
     {
-        //
+        $org->delete();
+        return redirect()
+            ->route('orgs.index')
+            ->with('status', __('Org deleted.'));
     }
 
     /**

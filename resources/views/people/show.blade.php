@@ -11,6 +11,12 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
+            <!-- Session Status -->
+            <x-auth-session-status class="mb-4" :status="session('status')" />
+            
+            <!-- Validation Errors -->
+            <x-auth-validation-errors class="mb-4" :errors="$errors" />
+            
             <div class="w-full mb-8 px-6 py-4 bg-white shadow-md overflow-hidden rounded-lg">
                 
                 @if ($currentPosition)
@@ -35,14 +41,22 @@
                             <span class="font-semibold mr-2">{{ $currentPosition->end_date_str }}</span>
                         @endif
                     </div>
+                @else
+                    <div class="text-gray-800 italic">
+                        [{{ __('No current position.') }}]
+                    </div>
                 @endif
                 
                 @if ($person->current_email)
-                    <div class="mt-2">
-                        <x-icons.at class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.at>
-                        <x-link href="mailto:{{ $person->current_email }}" target="_blank">
-                            {{ $person->current_email }}
-                        </x-link>
+                    <div class="mt-2 flex">
+                        <div class="mr-2">
+                            <x-icons.at class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.at>
+                        </div>
+                        <div>
+                            <x-link href="mailto:{{ $person->current_email }}" target="_blank">
+                                {{ $person->current_email }}
+                            </x-link>
+                        </div>
                     </div>
                 @endif
                 
@@ -54,43 +68,55 @@
             
             <div class="mb-4">
                 <x-button href="{{ route('people.edit', ['person' => $person->id]) }}" btncolor="blue" padding="tight" class="">
-                    Edit Info
+                    {{ __('Edit') }} {{ __('Info') }}
                 </x-button>
             </div>
             
             @if ($person->website)
-                <div class="my-2">
-                    <x-icons.globe class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.globe>
-                    <x-link href="{{ $person->website }}" target="_blank">
-                        {{ get_domain($person->website) }}
-                    </x-link>
+                <div class="my-2 flex">
+                    <div class="mr-2">
+                        <x-icons.globe class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.globe>
+                    </div>
+                    <div>
+                        <x-link href="{{ $person->website }}" target="_blank">
+                            {{ get_domain($person->website) }}
+                        </x-link>
+                    </div>
                 </div>
             @endif
             
             @if ($person->one_line_address)
-                <div class="my-2" x-data="{ show: false }">
-                    <x-icons.location-marker class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.location-marker>
-                    {{ $person->one_line_address }}
-                    <x-link href="https://www.google.com/maps/search/?api=1&query={{ urlencode($person->one_line_address) }}" target="_blank" class="ml-2">
-                        Maps
-                    </x-link>
-                    <div class="inline-block relative ml-2">
-                        <x-link role="button" href="javascript:void(0)" x-on:click="copyToClipboard('{!! htmlspecialchars($person->one_line_address, ENT_QUOTES) !!}');show=true;setTimeout(() => show = false, 2000)">
-                            Copy
+                <div class="my-2 flex" x-data="{ show: false }">
+                    <div class="mr-2">
+                        <x-icons.location-marker class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.location-marker>
+                    </div>
+                    <div>
+                        {{ $person->one_line_address }}
+                        <x-link href="https://www.google.com/maps/search/?api=1&query={{ urlencode($person->one_line_address) }}" target="_blank" class="ml-2">
+                            Maps
                         </x-link>
-                        <div x-show="show" x-cloak class="absolute z-10 left-1/2 -translate-x-1/2 bottom-full text-gray-500 bg-white p-1 shadow-md rounded whitespace-nowrap">
-                            Copied
+                        <div class="inline-block relative ml-2">
+                            <x-link role="button" href="javascript:void(0)" x-on:click="copyToClipboard('{!! htmlspecialchars($person->one_line_address, ENT_QUOTES) !!}');show=true;setTimeout(() => show = false, 2000)">
+                                Copy
+                            </x-link>
+                            <div x-show="show" x-cloak class="absolute z-10 left-1/2 -translate-x-1/2 bottom-full text-gray-500 bg-white p-1 shadow-md rounded whitespace-nowrap">
+                                Copied
+                            </div>
                         </div>
                     </div>
                 </div>
             @endif
             
             @if ($person->email)
-                <div class="my-2">
-                    <x-icons.at class="inline w-4 h-4 relative bottom-[1px] text-purple-500 mr-2"></x-icons.at>
-                    <x-link href="mailto:{{ $person->email }}" target="_blank">
-                        {{ $person->email }}
-                    </x-link>
+                <div class="my-2 flex">
+                    <div class="mr-2">
+                        <x-icons.at class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.at>
+                    </div>
+                    <div>
+                        <x-link href="mailto:{{ $person->email }}" target="_blank">
+                            {{ $person->email }}
+                        </x-link>
+                    </div>
                 </div>
             @endif
             
@@ -98,15 +124,19 @@
                 <x-phone class="my-2" :phone="$person->readable_phone"></x-phone>
             @endif
             
-            @if ($person->notes)
-                <div class="flex">
+            @if ($person->pronouns)
+                <div class="my-2 flex">
                     <div class="mr-2">
-                        <x-icons.document-text class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.document-text>
+                        <x-icons.happy class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.happy>
                     </div>
-                    <div class="ml-2 border-l-2 pl-2 border-purple-200">
-                        {!! nl2br(e($person->notes)) !!}
+                    <div>
+                        {{ $person->pronouns }}
                     </div>
                 </div>
+            @endif
+            
+            @if ($person->notes)
+                <x-expandable-notes :notes="$person->notes"></x-expandable-notes>
             @endif
             
             <div>
@@ -150,7 +180,7 @@
                             {{ $position->org->name }}
                         </x-link>
                         
-                        <x-button href="{{ route('positions.edit', ['position' => $position->id]) }}" class="ml-4" padding="tight" btncolor="green">
+                        <x-button href="{{ route('positions.edit', ['position' => $position->id, 'person' => $person->id]) }}" class="ml-4" padding="tight" btncolor="green">
                             {{ __('Edit') }}
                         </x-button>
                     </div>
@@ -166,14 +196,7 @@
                         <x-phone class="mt-1" :phone="$position->readable_phone"></x-phone>
                     @endif
                     @if ($position->notes)
-                        <div class="flex mt-1">
-                            <div class="mr-2">
-                                <x-icons.document-text class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.document-text>
-                            </div>
-                            <div class="ml-2 border-l-2 pl-2 border-purple-200">
-                                {!! nl2br(e($position->notes)) !!}
-                            </div>
-                        </div>
+                        <x-expandable-notes :notes="$position->notes"></x-expandable-notes>
                     @endif
                 </div>
             @endforeach

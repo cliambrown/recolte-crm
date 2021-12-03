@@ -7,3 +7,5 @@ window.Fuse = Fuse;
 
 require('./helpers.js');
 require('./components/suggestInput.js');
+require('./components/expandableNotes.js');
+require('./components/deleteForm.js');

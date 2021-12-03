@@ -16,11 +16,27 @@ class PersonController extends Controller
      */
     public function index()
     {
-        $people = Person::with('current_position.org')
-            ->orderBy('family_name')
-            ->orderBy('given_name')
-            ->paginate('20');
-        return view('people.index')->with(['people' => $people]);
+        
+        $q = trim(data_get($_GET, 'q', ''));
+        
+        if ($q) {
+            $people = Person::search($q)
+                ->orderBy('family_name')
+                ->orderBy('given_name')
+                ->paginate('20');
+            $people->load('current_position.org');
+        } else {
+            $people = Person::with('current_position.org')
+                ->orderBy('family_name')
+                ->orderBy('given_name')
+                ->paginate('20');
+        }
+        
+        $data = [
+            'people' => $people,
+            'q' => $q,
+        ];
+        return view('people.index')->with($data);
     }
 
     /**
@@ -202,7 +218,10 @@ class PersonController extends Controller
      */
     public function destroy(Person $person)
     {
-        //
+        $person->delete();
+        return redirect()
+            ->route('home')
+            ->with('status', __('Person deleted.'));
     }
 
     /**

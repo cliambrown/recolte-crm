@@ -1,5 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
+        
+        @if ($isEdit)
+            <x-delete-form
+                action="{{ route('positions.destroy', ['position' => $position->id]) }}"
+                class="float-right"
+                confirm-msg="{{ __('Are you sure you want to remove this position from :personName?', ['personName' => $person->full_name]) }}"
+                button-text="{{ __('Remove') }}"
+                >
+                <input type="hidden" name="redirect_url" value="{{ $redirectUrl }}">
+            </x-delete-form>
+        @endif
+        
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             @if ($isEdit)
                 {{ __('Edit') }}
@@ -8,6 +20,7 @@
             @endif
             {{ __('Position') }}
         </h2>
+        
     </x-slot>
 
     <div class="py-6">

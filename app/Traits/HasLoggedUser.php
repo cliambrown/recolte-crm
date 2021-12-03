@@ -7,6 +7,12 @@ use App\Models\User;
 trait HasLoggedUser
 {
     
+    public function initializeHasLoggedUser()
+    {
+        $this->fillable[] = 'created_by_user_id';
+        $this->fillable[] = 'updated_by_user_id';
+    }
+    
     public static function bootHasLoggedUser() {
         
         static::created(function ($model) {
