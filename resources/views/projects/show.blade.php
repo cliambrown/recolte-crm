@@ -6,9 +6,9 @@
             </span>
             {{ $project->name }}
             @if ($project->short_name)
-            <span class="text-gray-500 ml-3">
-                — {{ $project->short_name }}
-            </span>
+                <span class="text-gray-500 ml-3">
+                    — {{ $project->short_name }}
+                </span>
             @endif
         </h2>
     </x-slot>
@@ -70,7 +70,7 @@
             </div>
             
             @if ($project->project_orgs->count())
-                <h3 class="mt-8 my-4 text-lg text-gray-700">{{ __('People') }}</h3>
+                <h3 class="mt-8 my-4 text-lg text-gray-700">{{ __('Orgs') }}</h3>
             @endif
             
             @foreach ($project->project_orgs as $projectOrg)

@@ -108,6 +108,7 @@ class PositionController extends Controller
         $position->is_current = $isCurrent;
         $position->title = $request->title;
         $position->email = $request->email;
+        $position->phone = $request->phone;
         $position->start_year = $request->start_year;
         $position->start_month = $request->start_month;
         $position->start_day = $request->start_day;
@@ -193,6 +194,7 @@ class PositionController extends Controller
         $position->title = $request->title;
         $position->is_current = $isCurrent;
         $position->email = $request->email;
+        $position->phone = $request->phone;
         $position->start_year = $request->start_year;
         $position->start_month = $request->start_month;
         $position->start_day = $request->start_day;

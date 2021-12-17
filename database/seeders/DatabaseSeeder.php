@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Meeting;
 use App\Models\Org;
 use App\Models\Person;
 use App\Models\Position;
@@ -76,5 +77,7 @@ class DatabaseSeeder extends Seeder
         $position->save();
         
         Project::factory(50)->create();
+        
+        Meeting::factory(50)->create();
     }
 }

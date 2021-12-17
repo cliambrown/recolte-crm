@@ -35,6 +35,12 @@
                 
             </div>
             
+            @if ($q)
+                <div class="my-4 text-gray-700 text-sm">
+                    {{ __('Showing results for search') }} "{{ $q }}". <x-link href="{{ set_url_param(url()->current(), 'q', null) }}" class="ml-2">Clear search</x-link>
+                </div>
+            @endif
+            
             @foreach ($projects as $project)
                 
                 <div class="shadow bg-white p-4 rounded my-4">
@@ -54,9 +60,29 @@
                         @endif
                     </div>
                     <div class="text-sm text-gray-700 overflow-hidden mt-1">
-                        @if ($project->description)
-                            <div class="whitespace-nowrap overflow-ellipsis overflow-x-hidden">
-                                {{ $project->description }}
+                        @if ($project->description || $project->start_year || $project->end_year)
+                            <div class="whitespace-nowrap text-ellipsis overflow-x-hidden">
+                                @if ($project->start_year || $project->end_year)
+                                    <span class="text-purple-600 mr-3">
+                                        @if ($project->start_year)
+                                            @if (!$project->end_year)
+                                                <span class="text-gray-500 mr-1">{{ __('since') }}</span>
+                                            @endif
+                                            <span class="font-semibold mr-1">{{ $project->start_year }}</span>
+                                        @endif
+                                        @if ($project->end_year)
+                                            @if ($project->start_year)
+                                                <span class="text-gray-500 mr-1">{{ __('to') }}</span>
+                                            @else
+                                                <span class="text-gray-500 mr-1">{{ __('until') }}</span>
+                                            @endif
+                                            <span class="font-semibold">{{ $project->end_year }}</span>
+                                        @endif
+                                    </span>
+                                @endif
+                                @if ($project->description)
+                                    {{ $project->description }}
+                                @endif
                             </div>
                         @endif
                     </div>

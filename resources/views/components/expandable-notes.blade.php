@@ -6,7 +6,7 @@
     <div class="mr-2">
         <x-icons.document-text class="inline w-4 h-4 relative bottom-[1px] text-purple-500"></x-icons.document-text>
     </div>
-    <div class="border-l-2 pl-2 border-purple-200" :class="{ 'whitespace-nowrap overflow-x-hidden overflow-ellipsis no-br' : !expand }" x-ref="notes">
+    <div class="border-l-2 pl-2 border-purple-200" :class="{ 'whitespace-nowrap overflow-x-hidden text-ellipsis no-br' : !expand }" x-ref="notes">
         {!! nl2br(e($notes)) !!}
     </div>
     <div class="ml-2">

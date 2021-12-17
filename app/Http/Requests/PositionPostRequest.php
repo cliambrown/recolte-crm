@@ -17,6 +17,19 @@ class PositionPostRequest extends StartEndDateFormRequest
             'is_current' => 'nullable|int',
             'title' => 'nullable|string',
             'email' => 'nullable|email',
+            'phone' => [
+                'nullable',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (gettype($value) !== 'string') return true;
+                    $value = trim($value);
+                    if (!$value) return true;
+                    $phoneObj = get_valid_phone_obj($value);
+                    if ($phoneObj === null) {
+                        $fail(__('Invalid phone number'));
+                    }
+                },
+            ],
             'notes' => 'nullable|string',
         ];
         

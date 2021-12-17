@@ -5,7 +5,7 @@
             <x-delete-form
                 action="{{ route('people.destroy', ['person' => $person->id]) }}"
                 class="float-right"
-                confirm-msg="{{ __('Are you sure you want to delete :personName?', ['personName' => $person->full_name]) }}"
+                confirm-msg="{{ __('Are you sure you want to delete :itemName?', ['itemName' => $person->full_name]) }}"
                 >
             </x-delete-form>
         @endif

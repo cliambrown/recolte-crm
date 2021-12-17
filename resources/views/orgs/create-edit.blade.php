@@ -3,7 +3,7 @@
         
         @if ($isEdit)
             @php
-                $confirmMsg = __('Are you sure you want to delete ":orgName"?', ['orgName' => $org->name])
+                $confirmMsg = __('Are you sure you want to delete ":itemName"?', ['itemName' => $org->name])
             @endphp
             <x-delete-form
                 action="{{ route('orgs.destroy', ['org' => $org->id]) }}"

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\OrgController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PositionController;
@@ -45,6 +46,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('projects/{project}/orgs/{project_org}/edit', [ProjectOrgController::class, 'edit'])->name('projects.orgs.edit');
     Route::put('projects/{project}/orgs/{project_org}', [ProjectOrgController::class, 'update'])->name('projects.orgs.update');
     Route::delete('projects/{project}/orgs/{project_org}', [ProjectOrgController::class, 'destroy'])->name('projects.orgs.destroy');
+    
+    Route::resource('meetings', MeetingController::class);
     
 });
 

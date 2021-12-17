@@ -3,7 +3,7 @@
         
         @if ($isEdit)
             @php
-                $confirmMsg = __('Are you sure you want to delete ":projectName"?', ['projectName' => $project->name])
+                $confirmMsg = __('Are you sure you want to delete ":itemName"?', ['itemName' => $project->name])
             @endphp
             <x-delete-form
                 action="{{ route('projects.destroy', ['project' => $project->id]) }}"

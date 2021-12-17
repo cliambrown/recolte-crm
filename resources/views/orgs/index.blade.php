@@ -35,6 +35,12 @@
                 
             </div>
             
+            @if ($q)
+                <div class="my-4 text-gray-700 text-sm">
+                    {{ __('Showing results for search') }} "{{ $q }}". <x-link href="{{ set_url_param(url()->current(), 'q', null) }}" class="ml-2">Clear search</x-link>
+                </div>
+            @endif
+            
             @foreach ($orgs as $org)
                 
                 <div class="shadow bg-white p-4 rounded my-4">

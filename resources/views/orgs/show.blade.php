@@ -6,9 +6,9 @@
             </span>
             {{ $org->name }}
             @if ($org->short_name)
-            <span class="text-gray-500 ml-3">
-                — {{ $org->short_name }}
-            </span>
+                <span class="text-gray-500 ml-3">
+                    — {{ $org->short_name }}
+                </span>
             @endif
         </h2>
     </x-slot>
