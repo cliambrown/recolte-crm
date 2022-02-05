@@ -7,6 +7,6 @@
         <x-link href="tel:{{ urlencode($phone) }}" target="_blank" class="ml-2">
             Call
         </x-link>
-        <x-copy-button class="ml-2" :textToCopy="$phone"></x-copy-button>
+        <x-copy-button class="ml-2" :text-to-copy="$phone"></x-copy-button>
     </div>
 </div>

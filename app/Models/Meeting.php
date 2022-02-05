@@ -37,10 +37,20 @@ class Meeting extends Model
         return $array;
     }
     
+    // protected static function booted() {
+    //     static::deleting(function ($meeting) {
+    //         $meeting->participants()->detach();
+    //     });
+    // }
+    
     public function getDateStrAttribute() {
         if ($this->occurred_on_datetime) {
             return $this->occurred_on_datetime->isoFormat('LLL');
         }
         return $this->occurred_on->isoFormat('LL');
+    }
+    
+    public function participants() {
+        return $this->hasMany(MeetingParticipant::class);
     }
 }

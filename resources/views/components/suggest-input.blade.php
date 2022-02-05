@@ -43,7 +43,7 @@
         <div class="relative group" x-show="show_input" x-ref="input_group" {{ $asSelect ? 'x-cloak' : '' }} x-on:focusout="onLeaveInput">
             {{-- The input is repeated because optional attributes (debounce time) break blade components --}}
             @if ($optionsUrl)
-                <x-input {{ $attributes->merge(['class' => 'block w-full']) }}
+                <x-input {{ $attributes->merge(['class' => 'block w-full min-w-0']) }}
                     :id="$id"
                     name="{{ $name }}_input"
                     type="text"
@@ -58,7 +58,7 @@
                     x-on:focus="show_options = true"
                     />
             @else
-                <x-input {{ $attributes->merge(['class' => 'block w-full']) }}
+                <x-input {{ $attributes->merge(['class' => 'block w-full min-w-0']) }}
                     :id="$id"
                     type="text"
                     x-model="current_input"

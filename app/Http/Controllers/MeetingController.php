@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\MeetingType;
 use App\Http\Requests\MeetingPostRequest;
 use App\Models\Meeting;
+use App\Models\Person;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -46,8 +47,7 @@ class MeetingController extends Controller
     public function create()
     {
         $meeting = new Meeting;
-        $now = new Carbon;
-        $meeting->occurred_on = $now;
+        $meeting->occurred_on = now();
         
         $data = [
             'isEdit' => false,
@@ -95,6 +95,10 @@ class MeetingController extends Controller
      */
     public function show(Meeting $meeting)
     {
+        $meeting->load([
+            'participants.orgs',
+            'participants.person.current_position.org'
+        ]);
         return view('meetings.show')->with(['meeting' => $meeting]);
     }
 
@@ -117,15 +121,33 @@ class MeetingController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\MeetingPostRequest  $request
      * @param  \App\Models\Meeting  $meeting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Meeting $meeting)
+    public function update(MeetingPostRequest $request, Meeting $meeting)
     {
-        //
+        $meeting->name = $request->name;
+        $meeting->venue = $request->venue;
+        $meeting->description = $request->description;
+        
+        $occurredOn = new Carbon($request->occurred_on, 'America/Toronto');
+        $meeting->occurred_on = $occurredOn;
+        if ($request->occurred_on_time) {
+            $parts = explode(':', $request->occurred_on_time);
+            $occurredOn->set('hour', intval($parts[0]));
+            $occurredOn->set('minute', intval($parts[1]));
+            $meeting->occurred_on_datetime = $occurredOn;
+        }
+        
+        $meeting->type = $request->type;
+        $meeting->save();
+        
+        return redirect()
+            ->route('meetings.show', ['meeting' => $meeting->id])
+            ->with('status', __('New meeting saved.'));
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -134,6 +156,9 @@ class MeetingController extends Controller
      */
     public function destroy(Meeting $meeting)
     {
-        //
+        $meeting->delete();
+        return redirect()
+            ->route('meetings.index')
+            ->with('status', __('Meeting deleted.'));
     }
 }

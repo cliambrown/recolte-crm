@@ -41,6 +41,7 @@ class Person extends Model
         static::deleting(function ($person) {
             $person->positions()->delete();
             $person->project_people()->delete();
+            $person->meeting_participations()->delete();
         });
     }
     
@@ -177,5 +178,9 @@ class Person extends Model
             ->orderBy('start_month', 'desc')
             ->orderByRaw('ISNULL(start_day) DESC')
             ->orderBy('start_day', 'desc');
+    }
+    
+    public function meeting_participations() {
+        return $this->hasMany(MeetingParticipant::class);
     }
 }

@@ -109,21 +109,21 @@
                     <div class="mb-8 max-w-xs">
                         <x-label for="city" :value="__('City')" />
                         <div class="mt-1">
-                            <x-suggest-input id="city" name="city" :initValue="old('city', $person->city)" :options="$cityOptions" />
+                            <x-suggest-input id="city" name="city" :init-value="old('city', $person->city)" :options="$cityOptions" />
                         </div>
                     </div>
                     
                     <div class="mb-8 max-w-xs">
                         <x-label for="province" :value="__('Province')" />
                         <div class="mt-1">
-                            <x-suggest-input id="province" name="province" :initValue="old('province', $person->province)" :options="$provinceOptions" />
+                            <x-suggest-input id="province" name="province" :init-value="old('province', $person->province)" :options="$provinceOptions" />
                         </div>
                     </div>
                     
                     <div class="mb-8 max-w-xs">
                         <x-label for="country" :value="__('Country')" />
                         <div class="mt-1">
-                            <x-suggest-input id="country" name="country" :initValue="old('country', $person->country)" :options="$countryOptions" :asSelect="true" />
+                            <x-suggest-input id="country" name="country" :init-value="old('country', $person->country)" :options="$countryOptions" :as-select="true" />
                         </div>
                     </div>
                     

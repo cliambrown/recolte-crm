@@ -4419,6 +4419,12 @@ window.hasOverflowed = function (el) {
   return el.offsetWidth < el.scrollWidth;
 };
 
+window.parseIntNotNaN = function (value) {
+  var r = parseInt(value);
+  if (isNaN(r)) return 0;
+  return r;
+};
+
 window.getReadableAxiosError = function (error) {
   console.log(error ? error.toString() : 'getReadableAxiosError — unknown error');
   var message = "Sorry, an error occurred: \n";

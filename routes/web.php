@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\MeetingParticipantController;
 use App\Http\Controllers\OrgController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PositionController;
@@ -48,6 +49,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('projects/{project}/orgs/{project_org}', [ProjectOrgController::class, 'destroy'])->name('projects.orgs.destroy');
     
     Route::resource('meetings', MeetingController::class);
+    
+    // Route::get('meetings/{meeting}/participants/create', [MeetingParticipantController::class, 'create'])->name('meeting_participants.create');
+    // Route::post('meetings/{meeting}/participants/store', [MeetingParticipantController::class, 'store'])->name('meeting_participants.store');
+    // Route::get('meetings/{meeting}/participants/{participant}/edit', [MeetingParticipantController::class, 'edit'])->name('meeting_participants.edit');
+    // Route::put('meetings/{meeting}/participants/{participant}/update', [MeetingParticipantController::class, 'update'])->name('meeting_participants.update');
+    // Route::delete('meetings/{meeting}/participants/{participant}', [MeetingParticipantController::class, 'dstroy'])->name('meeting_participants.destroy');
     
 });
 

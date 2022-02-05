@@ -53,12 +53,12 @@
                         <div class="mt-1">
                             <x-suggest-input id="parent_org_id"
                                 name="parent_org_id"
-                                :initValue="old('parent_org_id')"
-                                :optionsUrl="route('orgs.api_search')"
-                                placeholderText="{{ __('Search') }}"
-                                :asSelect="true"
-                                labelAttr="name_with_short_name"
-                                dispatchEventName="set-parent-org" />
+                                :init-value="old('parent_org_id')"
+                                :options-url="route('orgs.api_search')"
+                                placeholder-text="{{ __('Search') }}"
+                                :as-select="true"
+                                label-attr="name_with_short_name"
+                                dispatch-event-name="set-parent-org" />
                         </div>
                     @endif
                 </div>
@@ -72,12 +72,12 @@
                         <div class="mt-1">
                             <x-suggest-input id="child_org_id"
                                 name="child_org_id"
-                                :initValue="old('child_org_id')"
-                                :optionsUrl="route('orgs.api_search')"
-                                placeholderText="{{ __('Search') }}"
-                                :asSelect="true"
-                                labelAttr="name_with_short_name"
-                                dispatchEventName="set-child-org" />
+                                :init-value="old('child_org_id')"
+                                :options-url="route('orgs.api_search')"
+                                placeholder-text="{{ __('Search') }}"
+                                :as-select="true"
+                                label-attr="name_with_short_name"
+                                dispatch-event-name="set-child-org" />
                         </div>
                     @endif
                 </div>

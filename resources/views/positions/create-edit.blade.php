@@ -51,11 +51,11 @@
                         <div class="mt-1">
                             <x-suggest-input id="person_id"
                                 name="person_id"
-                                :initValue="old('person_id')"
-                                :optionsUrl="route('people.api_search')"
-                                placeholderText="{{ __('Search') }}"
-                                :asSelect="true"
-                                labelAttr="full_name" />
+                                :init-value="old('person_id')"
+                                :options-url="route('people.api_search')"
+                                placeholder-text="{{ __('Search') }}"
+                                :as-select="true"
+                                label-attr="full_name" />
                         </div>
                     @endif
                 </div>
@@ -69,11 +69,11 @@
                         <div class="mt-1">
                             <x-suggest-input id="org_id"
                                 name="org_id"
-                                :initValue="old('org_id')"
-                                :optionsUrl="route('orgs.api_search')"
-                                placeholderText="{{ __('Search') }}"
-                                :asSelect="true"
-                                labelAttr="name_with_short_name" />
+                                :init-value="old('org_id')"
+                                :options-url="route('orgs.api_search')"
+                                placeholder-text="{{ __('Search') }}"
+                                :as-select="true"
+                                label-attr="name_with_short_name" />
                         </div>
                     @endif
                 </div>

@@ -49,11 +49,11 @@
                         <div class="mt-1">
                             <x-suggest-input id="person_id"
                                 name="person_id"
-                                :initValue="old('person_id')"
-                                :optionsUrl="route('people.api_search')"
-                                placeholderText="{{ __('Search') }}"
-                                :asSelect="true"
-                                labelAttr="full_name" />
+                                :init-value="old('person_id')"
+                                :options-url="route('people.api_search')"
+                                placeholder-text="{{ __('Search') }}"
+                                :as-select="true"
+                                label-attr="full_name" />
                         </div>
                     @endif
                 </div>
